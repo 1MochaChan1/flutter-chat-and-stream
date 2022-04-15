@@ -1,6 +1,6 @@
 # streaming
 
-A new Flutter project.
+This branch will have Firebase and Firestore integrated as its main database and messaging client.
 
 ## Getting Started
 
