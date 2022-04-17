@@ -15,7 +15,6 @@ class ContactProvider extends ChangeNotifier {
       UnmodifiableListView(_contactsList);
 
   getContacts() async {
-    _contactsList.clear();
     _contactsList = service.getContacts();
     CustomPreferences.setContactsList(_contactsList);
     notifyListeners();

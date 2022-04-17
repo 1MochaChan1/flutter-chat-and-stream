@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/contact_provider.dart';
 import 'package:streaming/controller/themes_provider.dart';
@@ -63,6 +65,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               .toggle(CusTheme.Light),
                           child: Text(
                             "Light",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                ?.copyWith(fontSize: 16.0),
+                          )),
+                      PopupMenuItem(
+                          onTap: () async {
+                            await GoogleSignIn().disconnect();
+                            FirebaseAuth.instance.signOut();
+                            Navigator.pushReplacementNamed(context, "/auth");
+                          },
+                          child: Text(
+                            "Log Out",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText2

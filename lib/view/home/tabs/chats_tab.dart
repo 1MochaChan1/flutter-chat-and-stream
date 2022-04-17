@@ -22,10 +22,6 @@ class ChatsTab extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Align(
-              //     alignment: AlignmentDirectional.topEnd,
-              //     child: IconButton(
-              //         onPressed: () {}, icon: const Icon(Icons.menu))),
               const Text(
                 "Chats",
                 style: TextStyle(

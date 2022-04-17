@@ -21,7 +21,7 @@ class CustomThemes {
             bodyText2: TextStyle(
                 color: kBlack, fontWeight: FontWeight.w200, fontSize: 14.0),
             headline1: TextStyle(
-                color: kBlack, fontWeight: FontWeight.w600, fontSize: 14.0)));
+                color: kBlack, fontWeight: FontWeight.w700, fontSize: 40.0)));
     LightTheme = LightTheme.copyWith(
         textSelectionTheme:
             LightTheme.textSelectionTheme.copyWith(cursorColor: kBlack));
@@ -40,11 +40,28 @@ class CustomThemes {
         hintColor: kOffWhite,
         iconTheme: IconThemeData(color: kWhite),
         selectedRowColor: kGreen,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+                primary: kBtnColorDark,
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0)))),
         textTheme: TextTheme(
             bodyText1: TextStyle(
-                color: kOffWhite, fontWeight: FontWeight.w300, fontSize: 18.0),
+              fontSize: 18.0,
+              color: kOffWhite,
+              fontWeight: FontWeight.w300,
+            ),
             bodyText2: TextStyle(
-                color: kWhite, fontWeight: FontWeight.w200, fontSize: 14.0)));
+              fontSize: 14.0,
+              color: kWhite,
+              fontWeight: FontWeight.w200,
+            ),
+            headline1: TextStyle(
+              fontSize: 40.0,
+              color: kOffWhite,
+              fontWeight: FontWeight.w600,
+            )));
 
     DarkTheme = DarkTheme.copyWith(
         textSelectionTheme:
