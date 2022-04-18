@@ -1,9 +1,9 @@
-import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/services/auth_service.dart';
+import 'package:streaming/services/database/database_service.dart';
+
+import '../../models/custom_user.dart';
 
 class AuthenticationScreen extends StatelessWidget {
   const AuthenticationScreen({Key? key}) : super(key: key);
@@ -12,22 +12,23 @@ class AuthenticationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Consumer<User?>(builder: (_, notifier, __) {
-          log(notifier.toString());
+        child: Consumer<CustomUser?>(builder: (_, cusUserNotifier, __) {
           return Center(
             child: Column(
               children: [
                 ElevatedButton(
                     child: const Text("Sign In"),
                     onPressed: () async {
-                      AuthService().googleSignIn();
-                      // Navigator.pushReplacementNamed(context, "/home");
+                      await AuthService().googleSignIn().then((user) {
+                        if (user != null) {
+                          context.read<DatabaseService?>()?.setUser(user);
+                        }
+                      });
                     }),
                 ElevatedButton(
                     child: const Text("Sign Out"),
                     onPressed: () async {
-                      AuthService().googleSignOut();
-                      // Navigator.pushReplacementNamed(context, "/home");
+                      await AuthService().googleSignOut();
                     }),
               ],
             ),

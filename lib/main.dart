@@ -1,30 +1,81 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming/app.dart';
+import 'package:streaming/models/custom_user.dart';
+import 'package:streaming/my_app.dart';
 import 'package:streaming/controller/contact_provider.dart';
 import 'package:streaming/controller/themes_provider.dart';
+import 'package:streaming/services/auth_service.dart';
+import 'package:streaming/services/database/database_service.dart';
+
+import 'services/shared_preferences.dart';
 
 Future<void> main() async {
+  /// INITIALIZATION ///
+
   // initializing Firebase and checking if app is initialized.
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
   // creating themeProvider with the current theme.
   ThemeProvider themeProvider = await ThemeProvider.init();
-  runApp(MultiProvider(providers: [
-    // contacts provider
-    ChangeNotifierProvider(create: (_) => ContactProvider()),
+  DatabaseService databaseService = await getDatabaseService();
 
-    // authState provider (from Firebase)
-    StreamProvider<User?>(
-        create: (_) => FirebaseAuth.instance.authStateChanges(),
-        initialData: null),
+  // get the initial page.
+  String initPage = await getInitPage();
 
-    // theme provider
-    ChangeNotifierProvider(
-      create: (_) => themeProvider,
-    ),
-  ], child: const MyApp()));
+  /// RUN APP ///
+  runApp(MultiProvider(
+      providers: [
+        // authService provider
+        Provider(create: (_) => AuthService()),
+
+        // contacts provider
+        ChangeNotifierProvider(create: (_) => ContactProvider()),
+
+        // data provider
+        Provider(
+          create: (_) => databaseService,
+        ),
+
+        // authState provider (from Firebase)
+        StreamProvider<CustomUser?>(
+            create: (context) => context.read<AuthService>().onAuthStateChanged,
+            initialData: null),
+
+        // theme provider
+        ChangeNotifierProvider(
+          create: (_) => themeProvider,
+        ),
+      ],
+      child: MyApp(
+        initPage: initPage,
+      )));
+}
+
+/// HELPERS ///
+Future<String> getInitPage() async {
+  late String initPage;
+  await CustomPreferences.getShowIntro().then((value) {
+    if (value) {
+      initPage = "/intro";
+      return null;
+    } else {
+      initPage = FirebaseAuth.instance.currentUser == null ? "/auth" : "/home";
+    }
+  });
+  return initPage;
+}
+
+Future<DatabaseService> getDatabaseService() async {
+  final spUser = await CustomPreferences.getCurrUser();
+
+  if (spUser == null) {
+    return DatabaseService();
+  } else {
+    return await DatabaseService.init() ?? DatabaseService();
+  }
 }

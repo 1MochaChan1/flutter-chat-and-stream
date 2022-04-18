@@ -15,6 +15,12 @@ class CustomThemes {
         fontFamily: "Brandon",
         hintColor: kGrey,
         iconTheme: IconThemeData(color: kGrey),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+                primary: kLightAccentColor,
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0)))),
         textTheme: TextTheme(
             bodyText1: TextStyle(
                 color: kBlack, fontWeight: FontWeight.w300, fontSize: 18.0),
@@ -26,7 +32,8 @@ class CustomThemes {
         textSelectionTheme:
             LightTheme.textSelectionTheme.copyWith(cursorColor: kBlack));
     LightTheme = LightTheme.copyWith(
-        colorScheme: LightTheme.colorScheme.copyWith(secondary: kOrange));
+        colorScheme:
+            LightTheme.colorScheme.copyWith(secondary: kLightAccentColor));
     return LightTheme;
   }
 
@@ -39,7 +46,7 @@ class CustomThemes {
         fontFamily: "Brandon",
         hintColor: kOffWhite,
         iconTheme: IconThemeData(color: kWhite),
-        selectedRowColor: kGreen,
+        selectedRowColor: kBlackAccentColor,
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
                 primary: kBtnColorDark,
@@ -67,7 +74,8 @@ class CustomThemes {
         textSelectionTheme:
             DarkTheme.textSelectionTheme.copyWith(cursorColor: kOffWhite));
     DarkTheme = DarkTheme.copyWith(
-        colorScheme: DarkTheme.colorScheme.copyWith(secondary: kGreen));
+        colorScheme:
+            DarkTheme.colorScheme.copyWith(secondary: kBlackAccentColor));
     return DarkTheme;
   }
 }
