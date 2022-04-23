@@ -42,9 +42,7 @@ class DatabaseService {
   // we can assign the customUser and use it.
   // this is used to instantiate and setInitUser is used to
   // assign the customUser to _user.
-  DatabaseService() {
-    addStream();
-  }
+  DatabaseService();
 
   // if the currentUser isn't stored in the sharedPreference
   // this method is called at the time of authentication.
@@ -52,6 +50,7 @@ class DatabaseService {
     // however this customUser doesn't have our custom properties
     // just a firebaseUser mapped to customUser.
     _user = customUser;
+    addStream();
     await checkNewUser(customUser);
   }
 
