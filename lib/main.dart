@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +8,6 @@ import 'package:streaming/controller/contact_provider.dart';
 import 'package:streaming/controller/themes_provider.dart';
 import 'package:streaming/services/auth_service.dart';
 import 'package:streaming/services/database/database_service.dart';
-
 import 'services/shared_preferences.dart';
 
 Future<void> main() async {
@@ -22,6 +19,8 @@ Future<void> main() async {
 
   // creating themeProvider with the current theme.
   ThemeProvider themeProvider = await ThemeProvider.init();
+
+  // get the databaseService depending on some conditions.
   DatabaseService databaseService = await getDatabaseService();
 
   // get the initial page.
@@ -37,14 +36,23 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ContactProvider()),
 
         // data provider
-        Provider(
+        Provider<DatabaseService?>(
           create: (_) => databaseService,
         ),
 
+        // user provider
+        StreamProvider<CustomUser?>.value(
+          value: databaseService.cusUserController.stream,
+          lazy: false,
+          initialData: null,
+          updateShouldNotify: (_, __) => true,
+        ),
+
         // authState provider (from Firebase)
-        StreamProvider<CustomUser?>(
+        StreamProvider<User?>(
             create: (context) => context.read<AuthService>().onAuthStateChanged,
-            initialData: null),
+            initialData: null,
+            catchError: (_, err) => null),
 
         // theme provider
         ChangeNotifierProvider(

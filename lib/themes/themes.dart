@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:streaming/constants.dart';
 
-enum CusTheme { Light, Dark, Sunset }
-
 class CustomThemes {
   static ThemeData get Light {
     ThemeData LightTheme = ThemeData(
@@ -22,12 +20,31 @@ class CustomThemes {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0)))),
         textTheme: TextTheme(
-            bodyText1: TextStyle(
-                color: kBlack, fontWeight: FontWeight.w300, fontSize: 18.0),
-            bodyText2: TextStyle(
-                color: kBlack, fontWeight: FontWeight.w200, fontSize: 14.0),
-            headline1: TextStyle(
-                color: kBlack, fontWeight: FontWeight.w700, fontSize: 40.0)));
+          bodyText1: TextStyle(
+              color: kBlack, fontWeight: FontWeight.w300, fontSize: 18.0),
+          bodyText2: TextStyle(
+              color: kBlack, fontWeight: FontWeight.w200, fontSize: 14.0),
+          headline1: TextStyle(
+            fontSize: 40.0,
+            color: kBlack,
+            fontWeight: FontWeight.w600,
+          ),
+          headline2: TextStyle(
+            fontSize: 36.0,
+            color: kBlack,
+            fontWeight: FontWeight.w500,
+          ),
+          headline3: TextStyle(
+            fontSize: 28.0,
+            color: kBlack,
+            fontWeight: FontWeight.w500,
+          ),
+          headline6: TextStyle(
+            fontSize: 18.0,
+            color: kBlack,
+            fontWeight: FontWeight.w500,
+          ),
+        ));
     LightTheme = LightTheme.copyWith(
         textSelectionTheme:
             LightTheme.textSelectionTheme.copyWith(cursorColor: kBlack));
@@ -44,38 +61,55 @@ class CustomThemes {
         bottomAppBarColor: KBottomAppBar,
         scaffoldBackgroundColor: kBlack,
         fontFamily: "Brandon",
-        hintColor: kOffWhite,
+        hintColor: kDarkHintColor,
         iconTheme: IconThemeData(color: kWhite),
-        selectedRowColor: kBlackAccentColor,
+        selectedRowColor: kDarkAccentColor,
+        dividerColor: kDarkDividerColor,
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-                primary: kBtnColorDark,
+                primary: kDarkBtnColor,
                 elevation: 5.0,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0)))),
         textTheme: TextTheme(
-            bodyText1: TextStyle(
-              fontSize: 18.0,
-              color: kOffWhite,
-              fontWeight: FontWeight.w300,
-            ),
-            bodyText2: TextStyle(
-              fontSize: 14.0,
-              color: kWhite,
-              fontWeight: FontWeight.w200,
-            ),
-            headline1: TextStyle(
-              fontSize: 40.0,
-              color: kOffWhite,
-              fontWeight: FontWeight.w600,
-            )));
+          bodyText1: TextStyle(
+            fontSize: 16.0,
+            color: kOffWhite,
+            fontWeight: FontWeight.w300,
+          ),
+          bodyText2: TextStyle(
+            fontSize: 18.0,
+            color: kOffWhite,
+            fontWeight: FontWeight.w400,
+          ),
+          headline1: TextStyle(
+            fontSize: 40.0,
+            color: kOffWhite,
+            fontWeight: FontWeight.w600,
+          ),
+          headline2: TextStyle(
+            fontSize: 36.0,
+            color: kOffWhite,
+            fontWeight: FontWeight.w500,
+          ),
+          headline3: TextStyle(
+            fontSize: 28.0,
+            color: kOffWhite,
+            fontWeight: FontWeight.w500,
+          ),
+          headline6: TextStyle(
+            fontSize: 18.0,
+            color: kOffWhite,
+            fontWeight: FontWeight.w500,
+          ),
+        ));
 
     DarkTheme = DarkTheme.copyWith(
         textSelectionTheme:
             DarkTheme.textSelectionTheme.copyWith(cursorColor: kOffWhite));
     DarkTheme = DarkTheme.copyWith(
         colorScheme:
-            DarkTheme.colorScheme.copyWith(secondary: kBlackAccentColor));
+            DarkTheme.colorScheme.copyWith(secondary: kDarkAccentColor));
     return DarkTheme;
   }
 }

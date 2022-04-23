@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_fields
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
@@ -6,7 +7,6 @@ import 'package:streaming/services/contact_service.dart';
 import 'package:streaming/services/shared_preferences.dart';
 
 class ContactProvider extends ChangeNotifier {
-  // ignore: prefer_final_fields
   List<Contact> _contactsList = [];
 
   ContactService service = ContactService();

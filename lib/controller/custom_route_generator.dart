@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:streaming/controller/page_state_provider.dart';
 import 'package:streaming/view/auth/authentication_screen.dart';
 import 'package:streaming/view/home/home_screen.dart';
 import 'package:streaming/view/introduction/introduction_screen.dart';
@@ -10,14 +12,16 @@ class CustomRouteGenerator {
     switch (settings.name) {
       case "/intro":
         return MaterialPageRoute(
-            settings: settings, builder: (_) => IntroductionScreen());
+            settings: settings, builder: (_) => const IntroductionScreen());
       case "/home":
         return MaterialPageRoute(
-            settings: settings, builder: (_) => const HomeScreen());
+            settings: settings,
+            builder: (_) => ChangeNotifierProvider<PageStateProvider>(
+                create: (_) => PageStateProvider(), child: const HomeScreen()));
 
       case "/auth":
         return MaterialPageRoute(
-            settings: settings, builder: (_) => const AuthenticationScreen());
+            settings: settings, builder: (_) => AuthenticationScreen());
 
       default:
         return errorRoute();

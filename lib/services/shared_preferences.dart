@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:streaming/models/contact.dart';
 import 'package:streaming/models/custom_user.dart';
-import 'package:streaming/themes/themes.dart';
+import 'package:streaming/models/enums.dart';
 
 class CustomPreferences {
   static const CONTACTS = "CONTACTS_LIST";
@@ -43,7 +43,7 @@ class CustomPreferences {
     }
   }
 
-  static Future<bool> setCurrUser(CustomUser user) async {
+  static Future<bool> setCurrUser(CustomUser? user) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final userEncoded = jsonEncode(user);
@@ -102,7 +102,8 @@ class CustomPreferences {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var currUserRaw = prefs.getString(CURR_USER);
-      if (currUserRaw == null) return null;
+      if (currUserRaw == "null" || currUserRaw == null) return null;
+
       var currUserJson = jsonDecode(currUserRaw);
       CustomUser cusUser = CustomUser.fromJson(currUserJson);
       return cusUser;

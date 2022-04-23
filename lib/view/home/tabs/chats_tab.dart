@@ -14,47 +14,39 @@ class ChatsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Chats",
-                style: TextStyle(
-                    fontFamily: "Brandon",
-                    fontSize: 40,
-                    fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(
-                height: 12.0,
-              ),
-              Align(
-                alignment: AlignmentDirectional.center,
-                child: SizedBox(
-                    width: size.width, child: buildSearchField(context)),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Flexible(
-                child: Consumer<ContactProvider>(builder: (_, notifier, __) {
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount:
-                          context.watch<ContactProvider>().contactsList.length,
-                      itemBuilder: (context, index) {
-                        return ContactCard(
-                            contact: notifier.contactsList[index]);
-                      });
-                }),
-              )
-            ],
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Chats",
+            style: Theme.of(context).textTheme.headline1,
           ),
-        ),
+          const SizedBox(
+            height: 12.0,
+          ),
+          Align(
+            alignment: AlignmentDirectional.center,
+            child:
+                SizedBox(width: size.width, child: buildSearchField(context)),
+          ),
+          const SizedBox(
+            height: 20.0,
+          ),
+          Flexible(
+            child: Consumer<ContactProvider>(builder: (_, notifier, __) {
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount:
+                      context.watch<ContactProvider>().contactsList.length,
+                  itemBuilder: (context, index) {
+                    return ContactCard(contact: notifier.contactsList[index]);
+                  });
+            }),
+          )
+        ],
       ),
     );
   }
@@ -63,7 +55,7 @@ class ChatsTab extends StatelessWidget {
   Widget buildSearchField(BuildContext context) {
     return TextField(
       controller: searchController,
-      style: const TextStyle(fontFamily: "Brandon", fontSize: 16.0),
+      style: Theme.of(context).textTheme.headline6,
       decoration: InputDecoration(
           filled: true,
           fillColor: Theme.of(context).bottomAppBarColor,

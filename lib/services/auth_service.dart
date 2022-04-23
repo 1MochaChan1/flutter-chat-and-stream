@@ -11,35 +11,41 @@ class AuthService {
   CustomUser? _user;
   CustomUser get user => _user!;
 
+  // constructor for authService.
   AuthService({FirebaseAuth? firebaseAuth, GoogleSignIn? googleSignIn})
       : _fAuth = firebaseAuth ?? FirebaseAuth.instance,
         _gSignIn = googleSignIn ?? GoogleSignIn();
 
+  // 1. converts the User object to CustomUser.
+  // 2. called whenever auth change detected.
+  // 3. this doesn't hold any significance except for it to be used in my_app.dart
+  // as a value of the Stream provider which calls it.
   CustomUser? _userFromFirebase(User? user) {
     if (user == null) return null;
 
     _user = CustomUser(
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        photoUrl: user.photoURL);
-    CustomPreferences.setCurrUser(_user!);
+      uid: user.uid,
+      displayName: user.displayName,
+      email: user.email,
+      photoUrl: user.photoURL,
+    );
 
     return _user;
   }
 
-  Stream<CustomUser?> get onAuthStateChanged async* {
-    CustomUser? cusUser;
+  // stream that is made from another stream
+  // this returns a CustomUser object instead of User.
+  Stream<User?> get onAuthStateChanged async* {
+    User? fbUser;
     await for (var user in _fAuth.authStateChanges()) {
-      if (user != null) {
-        cusUser = _userFromFirebase(user);
-      }
-      yield cusUser;
+      _userFromFirebase(user);
+      fbUser = user;
+      yield user;
     }
-    yield cusUser;
+    yield fbUser;
   }
 
-  // Google Sign In
+  // google Sign In
   Future<CustomUser?> googleSignIn() async {
     final GoogleSignInAccount? _user = await _gSignIn.signIn();
     if (_user == null) return null;
@@ -50,12 +56,19 @@ class AuthService {
         idToken: gAuth?.idToken, accessToken: gAuth?.accessToken);
 
     UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        await _fAuth.signInWithCredential(credential);
     return _userFromFirebase(userCredential.user);
   }
 
-  Future googleSignOut() async {
-    await GoogleSignIn().disconnect();
-    FirebaseAuth.instance.signOut();
+  // sign out
+  Future signOut() async {
+    // will use enum here.
+    bool isGoogleSignedIn = await _gSignIn.isSignedIn();
+    if (isGoogleSignedIn) {
+      await GoogleSignIn().disconnect();
+      CustomPreferences.setCurrUser(null);
+    }
+
+    _fAuth.signOut();
   }
 }
