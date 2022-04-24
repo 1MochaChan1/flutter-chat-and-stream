@@ -11,14 +11,16 @@ class CustomThemes {
         bottomAppBarColor: kOffWhite,
         scaffoldBackgroundColor: kWhite,
         fontFamily: "Brandon",
-        hintColor: kGrey,
+        hintColor: kLightHintColor,
         iconTheme: IconThemeData(color: kGrey),
+        dividerColor: kLightDividerColor,
+        primaryColorLight: kLightPrimaryColorLight,
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
                 primary: kLightAccentColor,
                 elevation: 5.0,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0)))),
+                    borderRadius: BorderRadius.circular(20.0)))),
         textTheme: TextTheme(
           bodyText1: TextStyle(
               color: kBlack, fontWeight: FontWeight.w300, fontSize: 18.0),
@@ -36,6 +38,11 @@ class CustomThemes {
           ),
           headline3: TextStyle(
             fontSize: 28.0,
+            color: kBlack,
+            fontWeight: FontWeight.w500,
+          ),
+          headline4: TextStyle(
+            fontSize: 22.0,
             color: kBlack,
             fontWeight: FontWeight.w500,
           ),
@@ -65,6 +72,7 @@ class CustomThemes {
         iconTheme: IconThemeData(color: kWhite),
         selectedRowColor: kDarkAccentColor,
         dividerColor: kDarkDividerColor,
+        primaryColorLight: kDarkPrimaryColorLight,
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
                 primary: kDarkBtnColor,
@@ -94,6 +102,11 @@ class CustomThemes {
           ),
           headline3: TextStyle(
             fontSize: 28.0,
+            color: kOffWhite,
+            fontWeight: FontWeight.w500,
+          ),
+          headline4: TextStyle(
+            fontSize: 22.0,
             color: kOffWhite,
             fontWeight: FontWeight.w500,
           ),

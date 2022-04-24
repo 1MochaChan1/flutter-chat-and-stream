@@ -65,7 +65,7 @@ class CustomPreferences {
             CusTheme.values.firstWhere((_theme) => _theme.name == curThemeStr);
         theme = curTheme;
       } else {
-        theme = CusTheme.Light;
+        theme = CusTheme.Dark;
       }
     } catch (e) {
       rethrow;

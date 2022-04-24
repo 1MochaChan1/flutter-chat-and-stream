@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/contact_provider.dart';
-import 'package:streaming/controller/page_state_provider.dart';
 import 'package:streaming/view/home/tabs/chats_tab.dart';
 import 'package:streaming/view/home/tabs/movies_tab.dart';
 import 'package:streaming/view/home/tabs/profile_tab.dart';
@@ -51,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: child,
               ),
               duration: const Duration(microseconds: 300),
-              child: EditMenuButton(),
+              child: const EditMenuButton(),
             ),
             const CustomMenuButton(),
           ],

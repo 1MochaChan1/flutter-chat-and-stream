@@ -6,6 +6,7 @@ import 'package:streaming/models/enums.dart';
 
 class ThemeProvider extends ChangeNotifier {
   late ThemeData currTheme;
+  late CusTheme currThemeName;
 
   // this named constructor is to be called
   // inside the class
@@ -34,9 +35,10 @@ class ThemeProvider extends ChangeNotifier {
         currTheme = CustomThemes.Dark;
         break;
       default:
-        currTheme = CustomThemes.Light;
+        currTheme = CustomThemes.Dark;
     }
     CustomPreferences.setCurrentTheme(theme);
+    currThemeName = theme;
     notifyListeners();
     return currTheme;
   }

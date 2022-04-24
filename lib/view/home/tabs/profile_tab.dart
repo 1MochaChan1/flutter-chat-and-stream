@@ -101,7 +101,10 @@ class ProfileTab extends StatelessWidget {
                               const SizedBox(
                                 width: 10.0,
                               ),
-                              Text("${user.email}")
+                              Text(
+                                "${user.email}",
+                                style: Theme.of(context).textTheme.bodyText1,
+                              )
                             ],
                           ),
                         ),
@@ -131,7 +134,8 @@ class ProfileTab extends StatelessWidget {
                 child: Text(
                   user.status,
                   style: Theme.of(context).textTheme.headline6?.copyWith(
-                      fontWeight: FontWeight.w400, color: Colors.grey.shade300),
+                      fontWeight: FontWeight.w400,
+                      color: Theme.of(context).primaryColorLight),
                   textAlign: TextAlign.center,
                 ),
               ),

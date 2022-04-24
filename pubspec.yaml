@@ -97,6 +97,9 @@ flutter:
         
         - asset: assets\fonts\Brandon_med.otf
           weight: 300
+    - family: CustomIconPack
+      fonts:
+        - asset: assets\fonts\CustomIcons.ttf
 
   #   - family: Trajan Pro
   #     fonts:
