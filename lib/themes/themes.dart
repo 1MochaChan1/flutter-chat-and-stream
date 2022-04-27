@@ -23,9 +23,9 @@ class CustomThemes {
                     borderRadius: BorderRadius.circular(20.0)))),
         textTheme: TextTheme(
           bodyText1: TextStyle(
-              color: kBlack, fontWeight: FontWeight.w300, fontSize: 18.0),
+              color: kBlack, fontWeight: FontWeight.w300, fontSize: 16.0),
           bodyText2: TextStyle(
-              color: kBlack, fontWeight: FontWeight.w200, fontSize: 14.0),
+              color: kBlack, fontWeight: FontWeight.w400, fontSize: 18.0),
           headline1: TextStyle(
             fontSize: 40.0,
             color: kBlack,
@@ -73,6 +73,8 @@ class CustomThemes {
         selectedRowColor: kDarkAccentColor,
         dividerColor: kDarkDividerColor,
         primaryColorLight: kDarkPrimaryColorLight,
+        floatingActionButtonTheme:
+            FloatingActionButtonThemeData(backgroundColor: kDarkBtnColor),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
                 primary: kDarkBtnColor,

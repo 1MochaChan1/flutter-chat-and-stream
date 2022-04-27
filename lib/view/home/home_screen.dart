@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming/controller/contact_provider.dart';
+import 'package:streaming/controller/fake_contact_provider.dart';
 import 'package:streaming/view/home/tabs/chats_tab.dart';
 import 'package:streaming/view/home/tabs/movies_tab.dart';
 import 'package:streaming/view/home/tabs/profile_tab.dart';
@@ -19,17 +19,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   /// DECLARATIONS ///
-  ValueNotifier<int> bottomNavIndex = ValueNotifier<int>(0);
-
-  // List<Widget> tabs = [ProfileTab(), ChatsTab(), const MovieTab()];
+  ValueNotifier<int> bottomNavIndex = ValueNotifier<int>(1);
   final TextEditingController searchController = TextEditingController();
-  final PageController _pageController = PageController();
+  final PageController _pageController = PageController(initialPage: 1);
 
   /// METHODS ///
   @override
   void initState() {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      context.read<ContactProvider>().getContacts();
+      context.read<FakeContactProvider>().getContacts();
     });
     super.initState();
   }

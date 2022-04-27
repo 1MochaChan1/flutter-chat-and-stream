@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/page_state_provider.dart';
 import 'package:streaming/view/auth/authentication_screen.dart';
+import 'package:streaming/view/contacts/users_screen.dart';
 import 'package:streaming/view/home/home_screen.dart';
 import 'package:streaming/view/introduction/introduction_screen.dart';
 
@@ -19,6 +20,9 @@ class CustomRouteGenerator {
             builder: (_) => ChangeNotifierProvider<PageStateProvider>(
                 create: (_) => PageStateProvider(), child: const HomeScreen()));
 
+      case "/users":
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const UsersSreen());
       case "/auth":
         return MaterialPageRoute(
             settings: settings, builder: (_) => AuthenticationScreen());

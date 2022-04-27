@@ -105,7 +105,7 @@ class CustomPreferences {
       if (currUserRaw == "null" || currUserRaw == null) return null;
 
       var currUserJson = jsonDecode(currUserRaw);
-      CustomUser cusUser = CustomUser.fromJson(currUserJson);
+      CustomUser cusUser = CustomUser.fromJson(json: currUserJson);
       return cusUser;
     } catch (e) {
       rethrow;

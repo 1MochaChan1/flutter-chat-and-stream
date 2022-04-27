@@ -2,7 +2,7 @@
 
 import 'package:streaming/models/contact.dart';
 
-class ContactService {
+class FakeContactService {
   List<Contact> contactsList = [
     Contact(
         id: 1,

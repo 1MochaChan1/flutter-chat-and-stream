@@ -14,10 +14,12 @@ class AuthenticationScreen extends StatelessWidget {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
+  final AuthService _service = AuthService();
 
   @override
   Widget build(BuildContext context) {
     CusTheme currentTheme = context.watch<ThemeProvider>().currThemeName;
+    final dbProvider = context.read<DatabaseService?>();
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
@@ -97,7 +99,14 @@ class AuthenticationScreen extends StatelessWidget {
                               .headline4
                               ?.copyWith(color: kWhite),
                         ),
-                        onPressed: () {}),
+                        onPressed: () async {
+                          final user = await _service.emailSignIn(
+                              email: emailController.text.trim(),
+                              password: passController.text.trim());
+                          if (user != null) {
+                            await dbProvider?.setInitUser(user);
+                          }
+                        }),
                   ),
                   SizedBox(
                     height: size.height * .02,
@@ -125,9 +134,8 @@ class AuthenticationScreen extends StatelessWidget {
                   ),
                   ElevatedButton.icon(
                       onPressed: () async {
-                        final user = await AuthService().googleSignIn();
+                        final user = await _service.googleSignIn();
                         if (user != null) {
-                          final dbProvider = context.read<DatabaseService?>();
                           await dbProvider?.setInitUser(user);
                         }
                       },

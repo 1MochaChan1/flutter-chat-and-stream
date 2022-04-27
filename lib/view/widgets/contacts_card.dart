@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:streaming/models/contact.dart';
-import 'package:streaming/services/database/database_service.dart';
 
 class ContactCard extends StatelessWidget {
   final Contact contact;
@@ -16,11 +14,7 @@ class ContactCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(10.0),
-        onTap: () async {
-          await context
-              .read<DatabaseService>()
-              .updateUserData(status: contact.name);
-        },
+        onTap: () async {},
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 6.0),
           child: Container(

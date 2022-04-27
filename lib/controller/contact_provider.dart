@@ -1,22 +1,28 @@
-// ignore_for_file: prefer_final_fields
-import 'dart:collection';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
-import 'package:streaming/models/contact.dart';
-import 'package:streaming/services/contact_service.dart';
-import 'package:streaming/services/shared_preferences.dart';
+import 'package:streaming/models/custom_user.dart';
+import 'package:streaming/services/database/contact_service.dart';
 
 class ContactProvider extends ChangeNotifier {
-  List<Contact> _contactsList = [];
+  List<dynamic> contacts = [];
 
-  ContactService service = ContactService();
+  final ContactService _service = ContactService();
 
-  UnmodifiableListView<Contact> get contactsList =>
-      UnmodifiableListView(_contactsList);
+  getContacts() {
+    _service.contactStreamController.stream.listen((contactList) {
+      contacts = contactList;
+      log(contactList.toString());
+      notifyListeners();
+    });
+  }
 
-  getContacts() async {
-    _contactsList = service.getContacts();
-    CustomPreferences.setContactsList(_contactsList);
+  Future<void> addContact(CustomUser newContact) async {
+    await _service.addToContact(newContact);
+    notifyListeners();
+  }
+
+  removeContact() {
     notifyListeners();
   }
 }

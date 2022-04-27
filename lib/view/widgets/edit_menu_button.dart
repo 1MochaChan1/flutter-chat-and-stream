@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/page_state_provider.dart';
+import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/models/enums.dart';
-import 'package:streaming/services/database/database_service.dart';
 
 class EditMenuButton extends StatelessWidget {
   const EditMenuButton({Key? key}) : super(key: key);
@@ -24,10 +24,10 @@ class EditMenuButton extends StatelessWidget {
               children: [
                 Flexible(
                   child: IconButton(
+                      color: Theme.of(context).iconTheme.color,
                       onPressed: () async {
-                        await context
-                            .read<DatabaseService>()
-                            .updateUserData(status: statusController.text)
+                        Provider.of<UserProvider>(context, listen: false)
+                            .updateCurrUser(status: statusController.text)
                             .then(
                                 (value) => state.changeState(PageState.static));
                         statusController.clear();

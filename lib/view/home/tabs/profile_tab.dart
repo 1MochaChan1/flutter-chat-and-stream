@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/page_state_provider.dart';
+import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/models/custom_user.dart';
 import 'package:streaming/models/enums.dart';
 
@@ -17,7 +18,10 @@ class ProfileTab extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Consumer<CustomUser?>(builder: (_, user, __) {
+    return Consumer<UserProvider?>(builder: (_, notifier, __) {
+      // call this function to see the changes in the stream.
+      notifier?.getCurrentUser();
+      CustomUser? user = notifier?.user;
       return user == null
           ? buildLoadingWidget()
           : GestureDetector(

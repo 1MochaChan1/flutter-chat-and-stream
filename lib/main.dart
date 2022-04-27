@@ -2,9 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming/models/custom_user.dart';
-import 'package:streaming/my_app.dart';
 import 'package:streaming/controller/contact_provider.dart';
+import 'package:streaming/controller/user_provider.dart';
+import 'package:streaming/my_app.dart';
+import 'package:streaming/controller/fake_contact_provider.dart';
 import 'package:streaming/controller/themes_provider.dart';
 import 'package:streaming/services/auth_service.dart';
 import 'package:streaming/services/database/database_service.dart';
@@ -33,19 +34,22 @@ Future<void> main() async {
         Provider(create: (_) => AuthService()),
 
         // contacts provider
-        ChangeNotifierProvider(create: (_) => ContactProvider()),
+        ChangeNotifierProvider(create: (_) => FakeContactProvider()),
 
         // data provider
         Provider<DatabaseService?>(
           create: (_) => databaseService,
         ),
 
-        // user provider
-        StreamProvider<CustomUser?>.value(
-          value: databaseService.cusUserController.stream,
-          lazy: false,
-          initialData: null,
-          updateShouldNotify: (_, __) => true,
+        // these just provide the users as contacts that
+        // can be added by the current user.
+        ChangeNotifierProvider<ContactProvider?>(
+          create: (_) => ContactProvider(),
+        ),
+
+        // user provider w/ changeNotifier.
+        ChangeNotifierProvider<UserProvider?>(
+          create: (_) => UserProvider(),
         ),
 
         // authState provider (from Firebase)

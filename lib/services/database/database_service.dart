@@ -1,39 +1,22 @@
-// ignore_for_file: prefer_final_fields
+// ignore_for_file: prefer_final_fields, unused_field
 import 'dart:async';
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:streaming/models/custom_user.dart';
 import 'package:streaming/services/shared_preferences.dart';
 
 class DatabaseService {
   /// DECLARATION ///
-  StreamController<CustomUser?> _cusUserController = StreamController.broadcast(
-    onCancel: () => log("Stream Cancelled"),
-  );
-  StreamController<CustomUser?> get cusUserController => _cusUserController;
-
-  // ignore: unused_field
-  late StreamSubscription _subscription;
-
-  CustomUser? _user;
+  FirebaseFirestore _fsInstance = FirebaseFirestore.instance;
+  static CustomUser? _user;
 
   /// METHODS ///
-
   // regular getter
-  CustomUser get user => _user!;
+  static CustomUser get user => _user!;
+  // StreamController<CustomUser?> get cusUserController => _cusUserController;
 
   // regular setter
   void setUser(CustomUser cusUser) async {
     _user = cusUser;
-  }
-
-  // created a subscription and adding events
-  // without it I was having trouble with the stream
-  // always in a state of adding another stream.
-  Future<void> addStream({CustomUser? cusUser}) async {
-    _subscription = getCurrUserFromDB().listen((event) {
-      return _cusUserController.add(event);
-    });
   }
 
   /// INIT ///
@@ -50,14 +33,12 @@ class DatabaseService {
     // however this customUser doesn't have our custom properties
     // just a firebaseUser mapped to customUser.
     _user = customUser;
-    addStream();
     await checkNewUser(customUser);
   }
 
   // if the currentUser is stored in sharedPreference.
   // this named constructor that can be called
   DatabaseService._init(CustomUser cusUser) {
-    addStream();
     _user = cusUser;
   }
 
@@ -74,6 +55,8 @@ class DatabaseService {
 
   // collection/table of users.
   CollectionReference users = FirebaseFirestore.instance.collection("Users");
+  CollectionReference contacts =
+      FirebaseFirestore.instance.collection("Contacts");
 
   // check if this user is new
   // yes: creates a new user in collection and gets it.
@@ -87,13 +70,10 @@ class DatabaseService {
         newUser = await createNewUser();
         _user = newUser;
       } else {
-        // newUser = await getCurrUserFromDB();
-        // _user = newUser;
-
         final fsUser = await users.doc(_user?.uid).get();
         final jsonMap = fsUser.data() as Map<String, dynamic>;
 
-        newUser = CustomUser.fromJson(jsonMap);
+        newUser = CustomUser.fromJson(json: jsonMap);
         _user = newUser;
         CustomPreferences.setCurrUser(_user);
       }
@@ -114,6 +94,7 @@ class DatabaseService {
         email: user.email,
       );
       await users.doc(user.uid).set(newUser.toJson());
+
       _user = newUser;
       CustomPreferences.setCurrUser(_user);
 
@@ -121,46 +102,5 @@ class DatabaseService {
     } catch (e) {
       rethrow;
     }
-  }
-
-  // gets the user from database and
-  // assigns it to the variable _user.
-  Stream<CustomUser?> getCurrUserFromDB() async* {
-    try {
-      CustomUser? currUser;
-
-      if (_user != null) {
-        await for (DocumentSnapshot<Object?> event
-            in users.doc(user.uid).snapshots()) {
-          if (event.data() != null) {
-            final jsonMap = event.data() as Map<String, dynamic>;
-            currUser = CustomUser.fromJson(jsonMap);
-            _user = currUser;
-            CustomPreferences.setCurrUser(_user);
-          }
-
-          yield currUser;
-        }
-      }
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  // update the user
-  Future<bool> updateUserData({
-    String? displayName,
-    String? status,
-  }) async {
-    bool success = false;
-    try {
-      await users.doc(user.uid).update({
-        "displayName": displayName ?? user.displayName,
-        "status": status ?? user.status
-      });
-    } catch (e) {
-      rethrow;
-    }
-    return success;
   }
 }

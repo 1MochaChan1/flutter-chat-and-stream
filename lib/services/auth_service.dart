@@ -45,19 +45,35 @@ class AuthService {
     yield fbUser;
   }
 
+  // email and password sign in.
+  Future<CustomUser?> emailSignIn(
+      {required String email, required String password}) async {
+    try {
+      final userCredential = await _fAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return _userFromFirebase(userCredential.user);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // google Sign In
   Future<CustomUser?> googleSignIn() async {
-    final GoogleSignInAccount? _user = await _gSignIn.signIn();
-    if (_user == null) return null;
+    try {
+      final GoogleSignInAccount? _user = await _gSignIn.signIn();
+      if (_user == null) return null;
 
-    final GoogleSignInAuthentication? gAuth = await _user.authentication;
+      final GoogleSignInAuthentication? gAuth = await _user.authentication;
 
-    final credential = GoogleAuthProvider.credential(
-        idToken: gAuth?.idToken, accessToken: gAuth?.accessToken);
+      final credential = GoogleAuthProvider.credential(
+          idToken: gAuth?.idToken, accessToken: gAuth?.accessToken);
 
-    UserCredential userCredential =
-        await _fAuth.signInWithCredential(credential);
-    return _userFromFirebase(userCredential.user);
+      UserCredential userCredential =
+          await _fAuth.signInWithCredential(credential);
+      return _userFromFirebase(userCredential.user);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   // sign out

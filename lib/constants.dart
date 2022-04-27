@@ -16,7 +16,7 @@ Color kLightPrimaryColorLight = const Color.fromARGB(255, 137, 137, 137);
 
 // Dark theme colors
 Color KBottomAppBar = Colors.grey.shade800;
-Color kDarkBtnColor = const Color.fromARGB(255, 0, 189, 97);
+Color kDarkBtnColor = const Color.fromARGB(255, 27, 178, 105);
 Color kDarkHintColor = const Color.fromARGB(255, 168, 168, 168);
 Color kDarkAccentColor = Colors.greenAccent;
 Color kDarkPrimaryColorLight = Colors.grey;
