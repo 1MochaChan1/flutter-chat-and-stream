@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming/controller/contact_provider.dart';
+import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/fake_contact_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/view/widgets/contacts_card.dart';
@@ -42,7 +42,7 @@ class ChatsTab extends StatelessWidget {
               Flexible(
                 child: Consumer2<FakeFriendProvider, FriendProvider>(
                     builder: (_, notifier, notifier2, __) {
-                  notifier2.getContacts();
+                  notifier2.getFriends();
                   return ListView.builder(
                       shrinkWrap: true,
                       itemCount: context
@@ -64,9 +64,9 @@ class ChatsTab extends StatelessWidget {
                 // backgroundColor: ,
                 elevation: 0.0,
                 onPressed: () async {
-                  await context.read<UserProvider>().getOtherUsers();
                   // Navigator.pushNamed(context, "/users");
-                  Navigator.pushNamed(context, "/chat_room");
+                  // Navigator.pushNamed(context, "/add_friend");
+                  Navigator.pushNamed(context, "/notifs");
                 },
                 child: const Icon(Icons.add),
               )),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/themes_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/models/enums.dart';
@@ -40,11 +41,23 @@ class CustomMenuButton extends StatelessWidget {
                   )),
               PopupMenuItem(
                   onTap: () async {
-                    context.read<UserProvider>().cancelStream();
+                    context.read<UserProvider>().cleanupStream();
+                    context.read<FriendProvider>().cleanupStream();
                     context.read<AuthService>().signOut();
                   },
                   child: Text(
                     "Log Out",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        ?.copyWith(fontSize: 16.0),
+                  )),
+              PopupMenuItem(
+                  onTap: () async {
+                    Navigator.pushNamed(context, "/notifs");
+                  },
+                  child: Text(
+                    "Notifications",
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2

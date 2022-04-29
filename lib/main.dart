@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming/controller/contact_provider.dart';
+import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/my_app.dart';
 import 'package:streaming/controller/fake_contact_provider.dart';
@@ -31,15 +31,15 @@ Future<void> main() async {
   runApp(MultiProvider(
       providers: [
         // authService provider
-        Provider(create: (_) => AuthService()),
+        InheritedProvider(create: (_) => AuthService()),
+
+        // data provider
+        InheritedProvider<DatabaseService?>(
+          create: (_) => databaseService,
+        ),
 
         // contacts provider
         ChangeNotifierProvider(create: (_) => FakeFriendProvider()),
-
-        // data provider
-        Provider<DatabaseService?>(
-          create: (_) => databaseService,
-        ),
 
         // these just provide the users as contacts that
         // can be added by the current user.

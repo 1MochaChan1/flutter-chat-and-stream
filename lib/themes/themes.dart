@@ -78,7 +78,7 @@ class CustomThemes {
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
                 primary: kDarkBtnColor,
-                elevation: 5.0,
+                elevation: 2.0,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0)))),
         textTheme: TextTheme(

@@ -8,6 +8,7 @@ import 'package:streaming/services/database/database_service.dart';
 import 'package:streaming/services/shared_preferences.dart';
 
 class UserService extends DatabaseService {
+  /// DECLARATIONS ///
   final StreamController<CustomUser?> _cusUserController =
       StreamController.broadcast(onCancel: () => log("Stream Cancelled"));
   late StreamSubscription _subscription;
@@ -16,15 +17,18 @@ class UserService extends DatabaseService {
   StreamController get cusUserController => _cusUserController;
   CustomUser get currentUser => DatabaseService.user;
 
+  /// INIT ///
+
   // constructor.
   UserService() {
-    addNewUserStream();
+    addStream();
   }
 
   // this has to be called on auth so that the if the user changes
   // the stream should also be update. Without this,
   // we keep listening to changes of the previous user.
-  addNewUserStream() {
+  @override
+  addStream() {
     _subscription = getCurrUserFromDB().listen((event) {
       return _cusUserController.add(event);
     });
@@ -33,35 +37,46 @@ class UserService extends DatabaseService {
   // cleans up the data from the stream and cancels it.
   // use it when you logout and don't want to keep listening.
   // this can help in getting rid of old data being used when user logs in.
-  cleanup() async {
+  @override
+  Future<void> cleanupStream() async {
     await _subscription.cancel();
     await _cusUserController.stream.drain();
   }
 
+  /// METHODS ///
+
   // get all the users
   Future<List<CustomUser>?> getOtherUsers() async {
     List<CustomUser> userList = [];
+    // access the users collection
     final rawUsers = await users.get();
 
-    for (var element in rawUsers.docs) {
-      final userInContacts = await contacts
+    // check for each user in Users collection
+    // is available in the Contacts collection.
+    for (var user in rawUsers.docs) {
+      final userInContacts = await friends
           .doc(currentUser.uid)
           .collection("userFriends")
-          .doc(element.id)
+          .doc(user.id)
           .get();
 
-      final json = element.data() as Map<String, dynamic>;
+      final json = user.data() as Map<String, dynamic>;
       CustomUser cUser;
+
+      // if available set its exists Property to true and return it.
       if (userInContacts.exists) {
         cUser = CustomUser.fromJson(json: json, exists: true);
+        // if not then simply return the user.
       } else {
         cUser = CustomUser.fromJson(json: json);
       }
 
+      // add the users to list except the current one.
       if (cUser.uid != currentUser.uid) {
         userList.add(cUser);
       }
     }
+    // return the list.
     return userList;
   }
 

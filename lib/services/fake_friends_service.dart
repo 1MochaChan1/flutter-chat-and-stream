@@ -21,7 +21,7 @@ class FakeFriendService {
         lastMessageTime: "2019-07-19 11:12:23"),
     Friend(
         id: 3,
-        name: "Yeh",
+        name: "Lee",
         imgUrl: "http://happyfacesparty.com/wp-content/" +
             "uploads/2019/06/avataaars-Frances.png",
         lastMessage: "Hey",

@@ -2,10 +2,11 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:streaming/models/abstract/custom_service.dart';
 import 'package:streaming/models/custom_user.dart';
 import 'package:streaming/services/shared_preferences.dart';
 
-class DatabaseService {
+class DatabaseService extends CustomService {
   /// DECLARATION ///
   FirebaseFirestore _fsInstance = FirebaseFirestore.instance;
   NumberFormat numFormat = NumberFormat("0000");
@@ -55,10 +56,12 @@ class DatabaseService {
 
   /// OPERATIONS ///
 
-  // collection/table of users.
+  // collections
   CollectionReference users = FirebaseFirestore.instance.collection("Users");
-  CollectionReference contacts =
+  CollectionReference friends =
       FirebaseFirestore.instance.collection("Friends");
+  CollectionReference requests =
+      FirebaseFirestore.instance.collection("Requests");
 
   // check if this user is new
   // yes: creates a new user in collection and gets it.

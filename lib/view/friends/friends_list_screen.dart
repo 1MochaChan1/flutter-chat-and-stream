@@ -2,19 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming/controller/contact_provider.dart';
+import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
 
-class UsersSreen extends StatelessWidget {
-  const UsersSreen({Key? key}) : super(key: key);
+class FriendsListScreen extends StatelessWidget {
+  const FriendsListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer2<UserProvider?, FriendProvider?>(
-          builder: (_, userNotifier, contactNotifier, __) {
-        userNotifier?.getOtherUsers();
-        contactNotifier?.getContacts();
+          builder: (_, userNotifier, friendNotifier, __) {
+        friendNotifier?.getFriends();
         final users = userNotifier?.usersList;
         return ListView.separated(
             itemCount: users?.length ?? 00,
@@ -28,7 +27,7 @@ class UsersSreen extends StatelessWidget {
                     onPressed: !exists
                         ? () async {
                             if (users != null) {
-                              await contactNotifier?.addContact(users[index]);
+                              await friendNotifier?.addFriend(users[index]);
                             }
                           }
                         : null,

@@ -1,5 +1,6 @@
-abstract class CustomService {
-  void addStream() {}
+import 'package:flutter/cupertino.dart';
 
-  void cleanupStream() {}
+abstract class CustomService with ChangeNotifier {
+  void addStream();
+  void cleanupStream();
 }

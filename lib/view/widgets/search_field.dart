@@ -51,7 +51,9 @@ class CustomSearchField extends StatelessWidget {
                         ),
                         onTap: () => showPassword(),
                       )
-                    : null,
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: trailingIcon),
                 hintText: hintText,
                 hintStyle: const TextStyle(fontWeight: FontWeight.w500)),
           );

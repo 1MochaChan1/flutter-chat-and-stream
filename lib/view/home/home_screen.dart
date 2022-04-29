@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/fake_contact_provider.dart';
+import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
-import 'package:streaming/services/database/database_service.dart';
 import 'package:streaming/view/home/tabs/chats_tab.dart';
 import 'package:streaming/view/home/tabs/movies_tab.dart';
 import 'package:streaming/view/home/tabs/profile_tab.dart';
@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> {
   /// DECLARATIONS ///
   ValueNotifier<int> bottomNavIndex = ValueNotifier<int>(1);
   final TextEditingController searchController = TextEditingController();
@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       context.read<FakeFriendProvider>().getContacts();
       context.read<UserProvider>().listenToStream();
+      context.read<FriendProvider>().listenToStream();
     });
 
     super.initState();
@@ -62,7 +63,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             const CustomMenuButton(),
           ],
         ),
-        // body: tabs[bottomNavIndex],
         body: PageView(
           controller: _pageController,
           onPageChanged: ((index) => bottomNavIndex.value = index),
