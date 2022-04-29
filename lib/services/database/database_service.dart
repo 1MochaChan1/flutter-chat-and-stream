@@ -1,18 +1,20 @@
 // ignore_for_file: prefer_final_fields, unused_field
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:streaming/models/custom_user.dart';
 import 'package:streaming/services/shared_preferences.dart';
 
 class DatabaseService {
   /// DECLARATION ///
   FirebaseFirestore _fsInstance = FirebaseFirestore.instance;
+  NumberFormat numFormat = NumberFormat("0000");
   static CustomUser? _user;
 
   /// METHODS ///
+
   // regular getter
   static CustomUser get user => _user!;
-  // StreamController<CustomUser?> get cusUserController => _cusUserController;
 
   // regular setter
   void setUser(CustomUser cusUser) async {
@@ -56,7 +58,7 @@ class DatabaseService {
   // collection/table of users.
   CollectionReference users = FirebaseFirestore.instance.collection("Users");
   CollectionReference contacts =
-      FirebaseFirestore.instance.collection("Contacts");
+      FirebaseFirestore.instance.collection("Friends");
 
   // check if this user is new
   // yes: creates a new user in collection and gets it.
@@ -86,13 +88,15 @@ class DatabaseService {
   // creates a new user if not exists and
   // uploads it to firestore.
   Future<CustomUser> createNewUser() async {
+    final usersCollection = await users.get();
+    final uniqueId = numFormat.format(usersCollection.docs.length);
     try {
       CustomUser newUser = CustomUser(
-        uid: user.uid,
-        displayName: user.displayName,
-        photoUrl: user.photoUrl,
-        email: user.email,
-      );
+          uid: user.uid,
+          displayName: user.displayName,
+          photoUrl: user.photoUrl,
+          email: user.email,
+          tag: "#" + uniqueId.toString());
       await users.doc(user.uid).set(newUser.toJson());
 
       _user = newUser;
@@ -103,4 +107,10 @@ class DatabaseService {
       rethrow;
     }
   }
+
+  @override
+  void addStream() {}
+
+  @override
+  void cleanupStream() {}
 }

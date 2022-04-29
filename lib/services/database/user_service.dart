@@ -11,15 +11,31 @@ class UserService extends DatabaseService {
   final StreamController<CustomUser?> _cusUserController =
       StreamController.broadcast(onCancel: () => log("Stream Cancelled"));
   late StreamSubscription _subscription;
+  late StreamSubscription _authSubscription;
 
   StreamController get cusUserController => _cusUserController;
   CustomUser get currentUser => DatabaseService.user;
 
   // constructor.
   UserService() {
+    addNewUserStream();
+  }
+
+  // this has to be called on auth so that the if the user changes
+  // the stream should also be update. Without this,
+  // we keep listening to changes of the previous user.
+  addNewUserStream() {
     _subscription = getCurrUserFromDB().listen((event) {
       return _cusUserController.add(event);
     });
+  }
+
+  // cleans up the data from the stream and cancels it.
+  // use it when you logout and don't want to keep listening.
+  // this can help in getting rid of old data being used when user logs in.
+  cleanup() async {
+    await _subscription.cancel();
+    await _cusUserController.stream.drain();
   }
 
   // get all the users
@@ -30,7 +46,7 @@ class UserService extends DatabaseService {
     for (var element in rawUsers.docs) {
       final userInContacts = await contacts
           .doc(currentUser.uid)
-          .collection("userContacts")
+          .collection("userFriends")
           .doc(element.id)
           .get();
 
@@ -80,7 +96,6 @@ class UserService extends DatabaseService {
           setUser(currUser);
           CustomPreferences.setCurrUser(currUser);
         }
-
         yield currUser;
       }
     } catch (e) {

@@ -11,7 +11,7 @@ class UsersSreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer2<UserProvider?, ContactProvider?>(
+      body: Consumer2<UserProvider?, FriendProvider?>(
           builder: (_, userNotifier, contactNotifier, __) {
         userNotifier?.getOtherUsers();
         contactNotifier?.getContacts();
@@ -20,7 +20,7 @@ class UsersSreen extends StatelessWidget {
             itemCount: users?.length ?? 00,
             separatorBuilder: (context, index) => const Divider(),
             itemBuilder: ((context, index) {
-              bool exists = users?[index].existsInContact ?? false;
+              bool exists = users?[index].existsInFriends ?? false;
               return ListTile(
                 isThreeLine: true,
                 onTap: (() {}),
@@ -44,7 +44,7 @@ class UsersSreen extends StatelessWidget {
                 ),
                 subtitle: Text(
                     "${users?[index].status}" +
-                        "\n is in contact? ${users?[index].existsInContact}",
+                        "\n is in contact? ${users?[index].existsInFriends}",
                     style: Theme.of(context).textTheme.bodyText1),
               );
             }));

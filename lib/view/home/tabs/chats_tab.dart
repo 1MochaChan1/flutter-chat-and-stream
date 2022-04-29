@@ -40,13 +40,13 @@ class ChatsTab extends StatelessWidget {
                 height: 20.0,
               ),
               Flexible(
-                child: Consumer2<FakeContactProvider, ContactProvider>(
+                child: Consumer2<FakeFriendProvider, FriendProvider>(
                     builder: (_, notifier, notifier2, __) {
                   notifier2.getContacts();
                   return ListView.builder(
                       shrinkWrap: true,
                       itemCount: context
-                          .watch<FakeContactProvider>()
+                          .watch<FakeFriendProvider>()
                           .contactsList
                           .length,
                       itemBuilder: (context, index) {
@@ -65,7 +65,8 @@ class ChatsTab extends StatelessWidget {
                 elevation: 0.0,
                 onPressed: () async {
                   await context.read<UserProvider>().getOtherUsers();
-                  Navigator.pushNamed(context, "/users");
+                  // Navigator.pushNamed(context, "/users");
+                  Navigator.pushNamed(context, "/chat_room");
                 },
                 child: const Icon(Icons.add),
               )),

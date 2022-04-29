@@ -5,16 +5,20 @@ class CustomUser {
       this.photoUrl,
       this.displayName,
       this.rooms,
+      this.tag = "#0000",
       this.status = "Something interesting...",
-      this.existsInContact = false});
+      this.existsInFriends = false});
 
+  // existsInContact should not be pushed to DB
+  // it's for local use only
   String uid;
   String? email;
   String? photoUrl;
   String? displayName;
   String status;
   Map<String, bool>? rooms;
-  bool existsInContact;
+  String tag;
+  bool existsInFriends;
 
   factory CustomUser.fromJson(
           {required Map<String, dynamic> json, bool? exists}) =>
@@ -25,7 +29,8 @@ class CustomUser {
           displayName: json["displayName"],
           status: json["status"] ?? "Something Interesting..",
           rooms: json["rooms"],
-          existsInContact: exists ?? false);
+          tag: json["tag"],
+          existsInFriends: exists ?? false);
 
   Map<String, dynamic> toJson() {
     return {
@@ -34,7 +39,8 @@ class CustomUser {
       "photoUrl": photoUrl,
       "displayName": displayName,
       "status": status,
-      "rooms": rooms
+      "rooms": rooms,
+      "tag": tag
     };
   }
 }

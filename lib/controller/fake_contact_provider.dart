@@ -2,16 +2,16 @@
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
-import 'package:streaming/models/contact.dart';
-import 'package:streaming/services/contact_service.dart';
+import 'package:streaming/models/friend.dart';
+import 'package:streaming/services/fake_friends_service.dart';
 import 'package:streaming/services/shared_preferences.dart';
 
-class FakeContactProvider extends ChangeNotifier {
-  List<Contact> _contactsList = [];
+class FakeFriendProvider extends ChangeNotifier {
+  List<Friend> _contactsList = [];
 
-  FakeContactService service = FakeContactService();
+  FakeFriendService service = FakeFriendService();
 
-  UnmodifiableListView<Contact> get contactsList =>
+  UnmodifiableListView<Friend> get contactsList =>
       UnmodifiableListView(_contactsList);
 
   getContacts() async {

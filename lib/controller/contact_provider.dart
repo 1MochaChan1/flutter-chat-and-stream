@@ -2,17 +2,16 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:streaming/models/custom_user.dart';
-import 'package:streaming/services/database/contact_service.dart';
+import 'package:streaming/services/database/friend_service.dart';
 
-class ContactProvider extends ChangeNotifier {
+class FriendProvider extends ChangeNotifier {
   List<dynamic> contacts = [];
 
-  final ContactService _service = ContactService();
+  final FriendService _service = FriendService();
 
   getContacts() {
     _service.contactStreamController.stream.listen((contactList) {
       contacts = contactList;
-      log(contactList.toString());
       notifyListeners();
     });
   }

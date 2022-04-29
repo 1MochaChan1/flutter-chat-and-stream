@@ -34,7 +34,7 @@ Future<void> main() async {
         Provider(create: (_) => AuthService()),
 
         // contacts provider
-        ChangeNotifierProvider(create: (_) => FakeContactProvider()),
+        ChangeNotifierProvider(create: (_) => FakeFriendProvider()),
 
         // data provider
         Provider<DatabaseService?>(
@@ -43,8 +43,8 @@ Future<void> main() async {
 
         // these just provide the users as contacts that
         // can be added by the current user.
-        ChangeNotifierProvider<ContactProvider?>(
-          create: (_) => ContactProvider(),
+        ChangeNotifierProvider<FriendProvider?>(
+          create: (_) => FriendProvider(),
         ),
 
         // user provider w/ changeNotifier.

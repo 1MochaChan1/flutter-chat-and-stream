@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:streaming/models/contact.dart';
+import 'package:streaming/models/friend.dart';
 
 class ContactCard extends StatelessWidget {
-  final Contact contact;
+  final Friend contact;
   const ContactCard({Key? key, required this.contact}) : super(key: key);
 
   @override

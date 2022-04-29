@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:streaming/models/contact.dart';
+import 'package:streaming/models/friend.dart';
 import 'package:streaming/models/custom_user.dart';
 import 'package:streaming/models/enums.dart';
 
@@ -22,7 +22,7 @@ class CustomPreferences {
     return true;
   }
 
-  static Future<bool> setContactsList(List<Contact> contacts) async {
+  static Future<bool> setContactsList(List<Friend> contacts) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final contactsEncoded = jsonEncode(contacts);
@@ -73,14 +73,14 @@ class CustomPreferences {
     return theme;
   }
 
-  static Future<List<Contact>> getContactsList() async {
-    List<Contact> contactsList = [];
+  static Future<List<Friend>> getContactsList() async {
+    List<Friend> contactsList = [];
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? rawContacts = prefs.getString(CONTACTS);
       var decodedList = jsonDecode(rawContacts ?? "");
       for (var json in decodedList) {
-        contactsList.add(Contact.fromJson(json));
+        contactsList.add(Friend.fromJson(json));
       }
     } catch (e) {
       rethrow;

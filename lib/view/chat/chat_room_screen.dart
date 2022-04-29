@@ -1,0 +1,13 @@
+import 'package:flutter/material.dart';
+
+class ChatRoomScreen extends StatelessWidget {
+  const ChatRoomScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: SafeArea(child: Container()),
+    );
+  }
+}

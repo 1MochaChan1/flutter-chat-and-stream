@@ -33,8 +33,7 @@ class AuthService {
     return _user;
   }
 
-  // stream that is made from another stream
-  // this returns a CustomUser object instead of User.
+  // returns firebaseUser if changed.
   Stream<User?> get onAuthStateChanged async* {
     User? fbUser;
     await for (var user in _fAuth.authStateChanges()) {

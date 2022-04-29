@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/fake_contact_provider.dart';
+import 'package:streaming/controller/user_provider.dart';
+import 'package:streaming/services/database/database_service.dart';
 import 'package:streaming/view/home/tabs/chats_tab.dart';
 import 'package:streaming/view/home/tabs/movies_tab.dart';
 import 'package:streaming/view/home/tabs/profile_tab.dart';
@@ -27,9 +29,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      context.read<FakeContactProvider>().getContacts();
+      context.read<FakeFriendProvider>().getContacts();
+      context.read<UserProvider>().listenToStream();
     });
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   /// WIDGET TREE ///

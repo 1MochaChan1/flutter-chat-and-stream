@@ -1,18 +1,18 @@
-class Contact {
+class Friend {
   int id;
   String? name;
   String? imgUrl;
   String? lastMessage;
   String? lastMessageTime;
 
-  Contact(
+  Friend(
       {required this.id,
       this.name,
       this.imgUrl,
       this.lastMessage,
       this.lastMessageTime});
 
-  factory Contact.fromJson(Map<String, dynamic> json) => Contact(
+  factory Friend.fromJson(Map<String, dynamic> json) => Friend(
         id: json["id"],
         name: json["name"],
         imgUrl: json["imgUrl"],

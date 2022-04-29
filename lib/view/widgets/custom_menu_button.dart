@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/themes_provider.dart';
+import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/models/enums.dart';
 import 'package:streaming/services/auth_service.dart';
+import 'package:streaming/services/database/user_service.dart';
 
 class CustomMenuButton extends StatelessWidget {
   const CustomMenuButton({Key? key}) : super(key: key);
@@ -38,6 +40,7 @@ class CustomMenuButton extends StatelessWidget {
                   )),
               PopupMenuItem(
                   onTap: () async {
+                    context.read<UserProvider>().cancelStream();
                     context.read<AuthService>().signOut();
                   },
                   child: Text(

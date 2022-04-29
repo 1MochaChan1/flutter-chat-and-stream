@@ -1,4 +1,6 @@
 // ignore_for_file: must_be_immutable
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +8,7 @@ import 'package:streaming/controller/page_state_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/models/custom_user.dart';
 import 'package:streaming/models/enums.dart';
+import 'package:streaming/services/database/database_service.dart';
 
 class ProfileTab extends StatelessWidget {
   ProfileTab({Key? key}) : super(key: key);
@@ -21,6 +24,7 @@ class ProfileTab extends StatelessWidget {
     return Consumer<UserProvider?>(builder: (_, notifier, __) {
       // call this function to see the changes in the stream.
       notifier?.getCurrentUser();
+      log(DatabaseService.user.displayName.toString());
       CustomUser? user = notifier?.user;
       return user == null
           ? buildLoadingWidget()
@@ -62,10 +66,22 @@ class ProfileTab extends StatelessWidget {
                       const SizedBox(height: 12.0),
                       Flexible(
                         child: Align(
-                          alignment: AlignmentDirectional.center,
-                          child: Text("${user.displayName}",
-                              style: Theme.of(context).textTheme.headline3),
-                        ),
+                            alignment: AlignmentDirectional.center,
+                            child: RichText(
+                              text: TextSpan(
+                                  text: "${user.displayName}",
+                                  style: Theme.of(context).textTheme.headline3,
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: user.tag,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3
+                                            ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .hintColor))
+                                  ]),
+                            )),
                       ),
                       Flexible(
                         child: Align(
