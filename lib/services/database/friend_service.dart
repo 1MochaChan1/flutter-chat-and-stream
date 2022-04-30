@@ -43,6 +43,8 @@ class FriendService extends DatabaseService {
   }
 
   /// METHODS ///
+
+  // fetches current users friends list
   Stream<List<CustomUser?>> getUserFriends() async* {
     List<CustomUser?> contactList = [];
     CollectionReference userFriends =
@@ -60,13 +62,29 @@ class FriendService extends DatabaseService {
     }
   }
 
-  Future<void> addToFriends(CustomUser newContact) async {
+  // accepts a friends request and adds them to the friends list.
+  Future<void> addToFriends(CustomUser reqSender) async {
     try {
+      // adding the request sender to out friendsList
       await friends
           .doc(currentUser.uid)
           .collection("userFriends")
-          .doc(newContact.uid)
-          .set(newContact.toJson());
+          .doc(reqSender.uid)
+          .set(reqSender.toJson());
+
+      // adding ourselves to the request sender's friendsList
+      await friends
+          .doc(reqSender.uid)
+          .collection("userFriends")
+          .doc(currentUser.uid)
+          .set(currentUser.toJson());
+
+      // updating the friend request status.
+      await requests
+          .doc(currentUser.uid)
+          .collection("userRequests")
+          .doc(reqSender.uid)
+          .update({"existsInFriends": true});
     } catch (e) {
       rethrow;
     }
@@ -78,15 +96,29 @@ class FriendService extends DatabaseService {
     try {
       var reqStream =
           requests.doc(currentUser.uid).collection("userRequests").snapshots();
-      reqStream.listen((event) {
-        log(event.docs.length.toString());
-      });
+
       await for (var snap in reqStream) {
+        CustomUser cUser;
+        List<CustomUser> tempList = [];
         for (var doc in snap.docs) {
-          final reqJson = doc.data() as Map<String, dynamic>;
-          CustomUser cUser = CustomUser.fromJson(json: reqJson);
-          requestsList.add(cUser);
+          final reqJson = doc.data();
+          // checking if current doc that's in request collection
+          // also exists in friends collection
+          final docFromFriends = await friends
+              .doc(currentUser.uid)
+              .collection("userFriends")
+              .doc(doc.id)
+              .get();
+
+          if (docFromFriends.exists) {
+            cUser = CustomUser.fromJson(json: reqJson, exists: true);
+          } else {
+            cUser = CustomUser.fromJson(json: reqJson);
+          }
+
+          tempList.add(cUser);
         }
+        requestsList = tempList;
         yield requestsList;
       }
     } catch (e) {
@@ -94,8 +126,12 @@ class FriendService extends DatabaseService {
     }
   }
 
+  // sends a request to the specified user
   Future<bool> sendRequest(String name) async {
     try {
+      // regex has two matches
+      // 1. everything before the '#'
+      // 2. everything after the '#'
       RegExp exp = RegExp(r"[a-zA-Z0-9_\-@.! ]+");
       Iterable<RegExpMatch> match = exp.allMatches(name);
       final dispName = match.toList()[0].group(0).toString();
@@ -119,4 +155,6 @@ class FriendService extends DatabaseService {
       rethrow;
     }
   }
+
+  //////// Testing ////////
 }

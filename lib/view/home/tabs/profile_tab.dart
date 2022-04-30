@@ -24,120 +24,124 @@ class ProfileTab extends StatelessWidget {
     return Consumer<UserProvider?>(builder: (_, notifier, __) {
       // call this function to see the changes in the stream.
       notifier?.getCurrentUser();
-      log(DatabaseService.user.displayName.toString());
       CustomUser? user = notifier?.user;
-      return user == null
-          ? buildLoadingWidget()
-          : GestureDetector(
-              onTap: () {
-                focusNode.unfocus();
-              },
-              child: Container(
-                color: Colors.transparent,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "You",
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                      Align(
-                        alignment: AlignmentDirectional.center,
-                        child: SizedBox(
-                          height: size.height * 0.25,
-                          width: size.height * 0.25,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100.0),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: user.photoUrl ?? "",
-                              placeholder: (context, url) => const Center(
-                                  child: CircularProgressIndicator()),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12.0),
-                      Flexible(
-                        child: Align(
-                            alignment: AlignmentDirectional.center,
-                            child: RichText(
-                              text: TextSpan(
-                                  text: "${user.displayName}",
-                                  style: Theme.of(context).textTheme.headline3,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: user.tag,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3
-                                            ?.copyWith(
-                                                color: Theme.of(context)
-                                                    .hintColor))
-                                  ]),
-                            )),
-                      ),
-                      Flexible(
-                        child: Align(
-                          alignment: AlignmentDirectional.center,
-                          child: Consumer<PageStateProvider>(
-                              builder: (context, pState, _) {
-                            return AnimatedSwitcher(
-                                transitionBuilder: ((child, animation) =>
-                                    ScaleTransition(
-                                        scale: animation, child: child)),
-                                duration: const Duration(milliseconds: 300),
-                                child: buildStatusWidget(
-                                    context, user, size, pState));
-                          }),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      Divider(
-                        endIndent: 20.0,
-                        indent: 20.0,
-                        color: Theme.of(context).dividerColor,
-                        thickness: 1.0,
-                      ),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              const Icon(Icons.email_outlined),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Text(
-                                "${user.email}",
-                                style: Theme.of(context).textTheme.bodyText1,
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            );
+      if (user != null && notifier?.currentState == DataState.done) {
+        return buildUserProfile(context, size, user);
+      } else if (user == null && notifier?.currentState == DataState.waiting) {
+        return buildLoadingWidget();
+      } else {
+        return Container();
+      }
     });
   }
 
   /// WIDGETS ///
+  GestureDetector buildUserProfile(
+      BuildContext context, Size size, CustomUser user) {
+    return GestureDetector(
+      onTap: () {
+        focusNode.unfocus();
+      },
+      child: Container(
+        color: Colors.transparent,
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "You",
+                style: Theme.of(context).textTheme.headline1,
+              ),
+              Align(
+                alignment: AlignmentDirectional.center,
+                child: SizedBox(
+                  height: size.height * 0.25,
+                  width: size.height * 0.25,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      imageUrl: user.photoUrl ?? "",
+                      placeholder: (context, url) =>
+                          const Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12.0),
+              Flexible(
+                child: Align(
+                    alignment: AlignmentDirectional.center,
+                    child: RichText(
+                      text: TextSpan(
+                          text: "${user.displayName}",
+                          style: Theme.of(context).textTheme.headline3,
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: user.tag,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline3
+                                    ?.copyWith(
+                                        color: Theme.of(context).hintColor))
+                          ]),
+                    )),
+              ),
+              Flexible(
+                child: Align(
+                  alignment: AlignmentDirectional.center,
+                  child: Consumer<PageStateProvider>(
+                      builder: (context, pState, _) {
+                    return AnimatedSwitcher(
+                        transitionBuilder: ((child, animation) =>
+                            ScaleTransition(scale: animation, child: child)),
+                        duration: const Duration(milliseconds: 300),
+                        child: buildStatusWidget(context, user, size, pState));
+                  }),
+                ),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              Divider(
+                endIndent: 20.0,
+                indent: 20.0,
+                color: Theme.of(context).dividerColor,
+                thickness: 1.0,
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Icon(Icons.email_outlined),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Text(
+                        "${user.email}",
+                        style: Theme.of(context).textTheme.bodyText1,
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget buildStatusWidget(BuildContext context, CustomUser user, Size size,
       PageStateProvider pState) {
     PageState state = pState.currState;

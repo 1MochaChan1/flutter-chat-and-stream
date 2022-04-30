@@ -26,7 +26,7 @@ class CustomRouteGenerator {
         return MaterialPageRoute(
             settings: settings, builder: (_) => const NotificationScreen());
 
-      case "/users":
+      case "/friends":
         return MaterialPageRoute(
             settings: settings, builder: (_) => const FriendsListScreen());
 

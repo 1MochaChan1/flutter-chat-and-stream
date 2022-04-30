@@ -5,10 +5,11 @@ import 'controller/custom_route_generator.dart';
 import 'controller/themes_provider.dart';
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key, required this.initPage}) : super(key: key);
+  const MyApp({Key? key, required this.initPage}) : super(key: key);
 
   // using a navkey to get current state of nav-stack maybe.
-  final GlobalKey<NavigatorState> navKey = CustomRouteGenerator.navkey;
+  static final GlobalKey<NavigatorState> _navKey = CustomRouteGenerator.navkey;
+  static GlobalKey<NavigatorState> get navKey => _navKey;
   final String initPage;
 
   @override
@@ -19,13 +20,14 @@ class MyApp extends StatelessWidget {
       String navPath = cusUserNotifier == null ? "/auth" : "/home";
       String currentRoute = ModalRoute.of(context)?.settings.name ?? "";
       if (currentRoute != "/intro") {
-        navKey.currentState?.pushNamedAndRemoveUntil(navPath, (route) => false);
+        _navKey.currentState
+            ?.pushNamedAndRemoveUntil(navPath, (route) => false);
       }
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: themeNotifier.currTheme,
         initialRoute: initPage,
-        navigatorKey: navKey,
+        navigatorKey: _navKey,
         onGenerateRoute: CustomRouteGenerator.onGenerateRoute,
       );
     });

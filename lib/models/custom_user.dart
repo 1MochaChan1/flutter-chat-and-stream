@@ -9,8 +9,8 @@ class CustomUser {
       this.status = "Something interesting...",
       this.existsInFriends = false});
 
-  // existsInContact should not be pushed to DB
-  // it's for local use only
+  // existsInContact should not be pushed to DB except for requests.
+  // it's for local use and requests only
   String uid;
   String? email;
   String? photoUrl;
@@ -24,13 +24,13 @@ class CustomUser {
           {required Map<String, dynamic> json, bool? exists}) =>
       CustomUser(
           uid: json["uid"],
-          email: json["email"],
-          photoUrl: json["photoUrl"],
-          displayName: json["displayName"],
+          email: json["email"] ?? "",
+          photoUrl: json["photoUrl"] ?? "",
+          displayName: json["displayName"] ?? "",
           status: json["status"] ?? "Something Interesting..",
-          rooms: json["rooms"],
-          tag: json["tag"],
-          existsInFriends: exists ?? false);
+          // rooms: json["rooms"],
+          tag: json["tag"] ?? "",
+          existsInFriends: exists ?? json["existsInFriends"] ?? false);
 
   Map<String, dynamic> toJson() {
     return {
@@ -40,6 +40,7 @@ class CustomUser {
       "displayName": displayName,
       "status": status,
       "rooms": rooms,
+      // "existsInFriends": existsInFriends,
       "tag": tag
     };
   }

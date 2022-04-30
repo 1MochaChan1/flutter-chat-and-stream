@@ -4,8 +4,8 @@ import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/themes_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/models/enums.dart';
+import 'package:streaming/my_app.dart';
 import 'package:streaming/services/auth_service.dart';
-import 'package:streaming/services/database/user_service.dart';
 
 class CustomMenuButton extends StatelessWidget {
   const CustomMenuButton({Key? key}) : super(key: key);
@@ -54,7 +54,10 @@ class CustomMenuButton extends StatelessWidget {
                   )),
               PopupMenuItem(
                   onTap: () async {
-                    Navigator.pushNamed(context, "/notifs");
+                    await Future.delayed(const Duration(milliseconds: 10));
+                    Navigator.of(context).pushNamed("/notifs");
+
+                    // MyApp.navKey.currentState?.pushNamed("/notifs");
                   },
                   child: Text(
                     "Notifications",

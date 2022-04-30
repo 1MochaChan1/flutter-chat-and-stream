@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:streaming/controller/fake_contact_provider.dart';
 import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
+import 'package:streaming/view/friends/notifications_screen.dart';
 import 'package:streaming/view/home/tabs/chats_tab.dart';
 import 'package:streaming/view/home/tabs/movies_tab.dart';
 import 'package:streaming/view/home/tabs/profile_tab.dart';
@@ -47,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.transparent,
@@ -66,7 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
         body: PageView(
           controller: _pageController,
           onPageChanged: ((index) => bottomNavIndex.value = index),
-          children: [ProfileTab(), ChatsTab(), const MovieTab()],
+          children: [
+            ProfileTab(),
+            ChatsTab(),
+            const MovieTab(),
+            // const NotificationScreen()
+          ],
         ),
         bottomNavigationBar: buildBottomNavBar(context),
       ),
@@ -79,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
         valueListenable: bottomNavIndex,
         builder: (context, value, _) {
           return BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             backgroundColor: Theme.of(context).bottomAppBarColor,
             currentIndex: bottomNavIndex.value,
             unselectedFontSize: 0.0,
@@ -104,6 +110,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.movie_outlined,
                   ),
                   label: ""),
+              // BottomNavigationBarItem(
+              //     icon: Icon(
+              //       Icons.notifications,
+              //     ),
+              //     label: ""),
             ],
           );
         });

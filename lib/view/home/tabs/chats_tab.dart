@@ -65,8 +65,8 @@ class ChatsTab extends StatelessWidget {
                 elevation: 0.0,
                 onPressed: () async {
                   // Navigator.pushNamed(context, "/users");
-                  // Navigator.pushNamed(context, "/add_friend");
-                  Navigator.pushNamed(context, "/notifs");
+                  Navigator.pushNamed(context, "/add_friend");
+                  // Navigator.pushNamed(context, "/notifs");
                 },
                 child: const Icon(Icons.add),
               )),
