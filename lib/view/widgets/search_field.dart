@@ -9,16 +9,20 @@ class CustomSearchField extends StatelessWidget {
   final Widget? trailingIcon;
   final TextInputType? keyboardType;
   final bool isPassword;
+  final String? errorText;
+  final bool validCondition;
   ValueNotifier<bool> _isPasswordVisible = ValueNotifier<bool>(false);
-  CustomSearchField({
-    Key? key,
-    this.controller,
-    this.hintText = "",
-    this.leadingIcon,
-    this.trailingIcon,
-    this.isPassword = false,
-    this.keyboardType,
-  }) : super(key: key);
+  CustomSearchField(
+      {Key? key,
+      this.controller,
+      this.hintText = "",
+      this.leadingIcon,
+      this.trailingIcon,
+      this.isPassword = false,
+      this.keyboardType,
+      this.errorText,
+      this.validCondition = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +40,15 @@ class CustomSearchField extends StatelessWidget {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide.none),
+                errorBorder: !validCondition
+                    ? OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                            style: BorderStyle.solid,
+                            width: 1.5,
+                            color: Colors.redAccent))
+                    : null,
+                errorText: !validCondition ? errorText : null,
                 prefixIcon: Icon(
                   leadingIcon,
                   color: Theme.of(context).hintColor,

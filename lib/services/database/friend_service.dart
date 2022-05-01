@@ -144,6 +144,21 @@ class FriendService extends DatabaseService {
 
       final rawData = query.docs[0].data() as Map<String, dynamic>;
       final friendReqReceiver = CustomUser.fromJson(json: rawData);
+
+      final isAlreadyFriend = await friends
+          .doc(currentUser.uid)
+          .collection("userFriends")
+          .doc(friendReqReceiver.uid)
+          .get();
+
+      if (isAlreadyFriend.exists) {
+        return false;
+      }
+
+      if (friendReqReceiver.uid == currentUser.uid) {
+        return false;
+      }
+
       await requests
           .doc(friendReqReceiver.uid)
           .collection("userRequests")
@@ -152,7 +167,10 @@ class FriendService extends DatabaseService {
 
       return true;
     } catch (e) {
-      rethrow;
+      e as Error;
+      e.stackTrace;
+      return false;
+      // rethrow;
     }
   }
 
