@@ -36,7 +36,7 @@ class CustomSearchField extends StatelessWidget {
             obscureText: isPassword && !_isPasswordVisible.value,
             decoration: InputDecoration(
                 filled: true,
-                fillColor: Theme.of(context).bottomAppBarColor,
+                // fillColor: Theme.of(context).bottomAppBarColor,
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide.none),

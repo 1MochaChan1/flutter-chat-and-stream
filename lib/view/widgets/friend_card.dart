@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:streaming/models/friend.dart';
 
-class ContactCard extends StatelessWidget {
+class FriendCard extends StatelessWidget {
   final Friend contact;
-  const ContactCard({Key? key, required this.contact}) : super(key: key);
+  const FriendCard({Key? key, required this.contact}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,9 @@ class ContactCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(10.0),
-        onTap: () async {},
+        onTap: () async {
+          Navigator.of(context).pushNamed("/chat_room");
+        },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 6.0),
           child: Container(

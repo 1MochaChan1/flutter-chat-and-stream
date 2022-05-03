@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/fake_contact_provider.dart';
-import 'package:streaming/controller/user_provider.dart';
-import 'package:streaming/view/widgets/contacts_card.dart';
+import 'package:streaming/controller/friend_provider.dart';
+import 'package:streaming/view/widgets/friend_card.dart';
 
 // ignore: must_be_immutable
 class ChatsTab extends StatelessWidget {
@@ -50,7 +49,7 @@ class ChatsTab extends StatelessWidget {
                           .contactsList
                           .length,
                       itemBuilder: (context, index) {
-                        return ContactCard(
+                        return FriendCard(
                             contact: notifier.contactsList[index]);
                       });
                 }),

@@ -1,6 +1,4 @@
 // ignore_for_file: must_be_immutable
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +6,6 @@ import 'package:streaming/controller/page_state_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/models/custom_user.dart';
 import 'package:streaming/models/enums.dart';
-import 'package:streaming/services/database/database_service.dart';
 
 class ProfileTab extends StatelessWidget {
   ProfileTab({Key? key}) : super(key: key);

@@ -4,7 +4,6 @@ import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/themes_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/models/enums.dart';
-import 'package:streaming/my_app.dart';
 import 'package:streaming/services/auth_service.dart';
 
 class CustomMenuButton extends StatelessWidget {

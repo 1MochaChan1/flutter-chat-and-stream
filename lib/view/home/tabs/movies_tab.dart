@@ -5,6 +5,13 @@ class MovieTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: Center(
+          child: Text(
+        "Coming Soon",
+        style: Theme.of(context).textTheme.bodyText2,
+      )),
+    );
   }
 }

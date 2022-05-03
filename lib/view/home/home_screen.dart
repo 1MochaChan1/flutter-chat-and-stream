@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:streaming/controller/fake_contact_provider.dart';
 import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
-import 'package:streaming/view/friends/notifications_screen.dart';
 import 'package:streaming/view/home/tabs/chats_tab.dart';
 import 'package:streaming/view/home/tabs/movies_tab.dart';
 import 'package:streaming/view/home/tabs/profile_tab.dart';

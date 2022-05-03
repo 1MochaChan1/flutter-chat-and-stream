@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 import 'package:flutter/material.dart';
+import 'package:streaming/constants.dart';
 import 'package:streaming/services/shared_preferences.dart';
 import 'package:streaming/themes/themes.dart';
 import 'package:streaming/models/enums.dart';
@@ -21,12 +22,14 @@ class ThemeProvider extends ChangeNotifier {
   // no: return light theme
   static Future<ThemeProvider> init() async {
     CusTheme ctheme = await CustomPreferences.getCurrentTheme();
+    setkTextContainerColors(ctheme);
     ThemeProvider themeProviderInst = ThemeProvider._init(ctheme);
     return themeProviderInst;
   }
 
   // toggle between themes.
   ThemeData toggle(CusTheme theme) {
+    setkTextContainerColors(theme);
     switch (theme) {
       case CusTheme.Light:
         currTheme = CustomThemes.Light;

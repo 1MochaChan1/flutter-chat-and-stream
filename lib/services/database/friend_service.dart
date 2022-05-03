@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_final_fields, unused_field
 
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:streaming/models/custom_user.dart';

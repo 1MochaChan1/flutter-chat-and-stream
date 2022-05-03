@@ -38,13 +38,16 @@ class FriendProvider extends ChangeNotifier {
   }
 
   /// METHODS ///
-
-  // stream of friends
-  getFriends() {
-    _service.friendStreamController.stream.listen((friendsList) {
-      _friends = friendsList;
+  // send friend request to a user.
+  Future<bool> sendFriendRequest(String name) async {
+    bool success = false;
+    try {
+      success = await _service.sendRequest(name);
       notifyListeners();
-    }, onError: (err) => _currentState = DataState.error);
+      return success;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   // stream of requests.
@@ -63,15 +66,12 @@ class FriendProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> sendFriendRequest(String name) async {
-    bool success = false;
-    try {
-      success = await _service.sendRequest(name);
+  // stream of friends
+  getFriends() {
+    _service.friendStreamController.stream.listen((friendsList) {
+      _friends = friendsList;
       notifyListeners();
-      return success;
-    } catch (e) {
-      rethrow;
-    }
+    }, onError: (err) => _currentState = DataState.error);
   }
 
   unFriend() {

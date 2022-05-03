@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/page_state_provider.dart';
 import 'package:streaming/view/auth/authentication_screen.dart';
+import 'package:streaming/view/chat/chat_room_screen.dart';
 import 'package:streaming/view/friends/add_friend_screen.dart';
 import 'package:streaming/view/friends/friends_list_screen.dart';
 import 'package:streaming/view/friends/notifications_screen.dart';
@@ -16,15 +17,19 @@ class CustomRouteGenerator {
       case "/intro":
         return MaterialPageRoute(
             settings: settings, builder: (_) => const IntroductionScreen());
+      case "/auth":
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => AuthenticationScreen());
+
       case "/home":
         return MaterialPageRoute(
             settings: settings,
             builder: (_) => ChangeNotifierProvider<PageStateProvider>(
                 create: (_) => PageStateProvider(), child: const HomeScreen()));
 
-      case "/notifs":
+      case "/chat_room":
         return MaterialPageRoute(
-            settings: settings, builder: (_) => const NotificationScreen());
+            settings: settings, builder: (_) => ChatRoomScreen());
 
       case "/friends":
         return MaterialPageRoute(
@@ -34,9 +39,9 @@ class CustomRouteGenerator {
         return MaterialPageRoute(
             settings: settings, builder: (_) => AddFriendScreen());
 
-      case "/auth":
+      case "/notifs":
         return MaterialPageRoute(
-            settings: settings, builder: (_) => AuthenticationScreen());
+            settings: settings, builder: (_) => const NotificationScreen());
 
       default:
         return errorRoute();

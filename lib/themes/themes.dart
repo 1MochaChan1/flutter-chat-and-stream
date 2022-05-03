@@ -8,13 +8,16 @@ class CustomThemes {
     ThemeData LightTheme = ThemeData(
         primaryColor: kWhite,
         backgroundColor: kWhite,
-        bottomAppBarColor: kOffWhite,
+        bottomAppBarColor: kLightBottomAppBar,
+        appBarTheme: AppBarTheme(backgroundColor: kLightAppBar, elevation: 2.0),
         scaffoldBackgroundColor: kWhite,
         fontFamily: "Brandon",
         hintColor: kLightHintColor,
         iconTheme: IconThemeData(color: kGrey),
         dividerColor: kLightDividerColor,
         primaryColorLight: kLightPrimaryColorLight,
+        inputDecorationTheme:
+            InputDecorationTheme(fillColor: kLightTextFieldFill),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
                 primary: kLightAccentColor,
@@ -65,7 +68,16 @@ class CustomThemes {
     ThemeData DarkTheme = ThemeData(
         primaryColor: kBlack,
         backgroundColor: kGrey,
-        bottomAppBarColor: KBottomAppBar,
+        bottomAppBarColor: kDarkBottomAppBar,
+        appBarTheme: AppBarTheme(
+          backgroundColor: kDarkAppBar,
+          elevation: 0.0,
+          titleTextStyle: TextStyle(
+            fontSize: 22.0,
+            color: kOffWhite,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         scaffoldBackgroundColor: kBlack,
         fontFamily: "Brandon",
         hintColor: kDarkHintColor,
@@ -73,6 +85,8 @@ class CustomThemes {
         selectedRowColor: kDarkAccentColor,
         dividerColor: kDarkDividerColor,
         primaryColorLight: kDarkPrimaryColorLight,
+        inputDecorationTheme:
+            InputDecorationTheme(fillColor: kDarkTextFieldFill),
         floatingActionButtonTheme:
             FloatingActionButtonThemeData(backgroundColor: kDarkBtnColor),
         elevatedButtonTheme: ElevatedButtonThemeData(

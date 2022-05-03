@@ -1,6 +1,5 @@
 // ignore_for_file: unused_field, prefer_final_fields
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:streaming/models/custom_user.dart';
