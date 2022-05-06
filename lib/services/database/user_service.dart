@@ -1,6 +1,5 @@
 // ignore_for_file: unused_field
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:streaming/models/custom_user.dart';
@@ -10,7 +9,7 @@ import 'package:streaming/services/shared_preferences.dart';
 class UserService extends DatabaseService {
   /// DECLARATIONS ///
   final StreamController<CustomUser?> _cusUserController =
-      StreamController.broadcast(onCancel: () => log("Stream Cancelled"));
+      StreamController.broadcast();
   late StreamSubscription _subscription;
   late StreamSubscription _authSubscription;
 
@@ -87,9 +86,35 @@ class UserService extends DatabaseService {
   }) async {
     bool success = false;
     try {
-      await users.doc(DatabaseService.user.uid).update({
+      // if something doesn't update change current user back to DBService.user.
+
+      // updating user data in users collection
+      await users.doc(currentUser.uid).update({
         "displayName": displayName ?? DatabaseService.user.displayName,
         "status": status ?? DatabaseService.user.status
+      });
+
+      // updating user data in friends collection
+      friends.get().then((value) {
+        // getting each user from the friends collections
+        for (var friendDoc in value.docs) {
+          // querying if the users have the currentUser as their friend.
+          friends
+              .doc(friendDoc.id)
+              .collection("userFriends")
+              .where("uid", isEqualTo: currentUser.uid)
+              .get()
+              .then((value) {
+            // for document where currentUser is their friend
+            // currentUsers data is updated.
+            for (var currUser in value.docs) {
+              currUser.reference.update({
+                "displayName": displayName ?? DatabaseService.user.displayName,
+                "status": status ?? DatabaseService.user.status
+              });
+            }
+          });
+        }
       });
     } catch (e) {
       rethrow;

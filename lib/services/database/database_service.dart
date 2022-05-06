@@ -62,6 +62,7 @@ class DatabaseService extends CustomService {
       FirebaseFirestore.instance.collection("Friends");
   CollectionReference requests =
       FirebaseFirestore.instance.collection("Requests");
+  CollectionReference rooms = FirebaseFirestore.instance.collection("Rooms");
 
   // check if this user is new
   // yes: creates a new user in collection and gets it.

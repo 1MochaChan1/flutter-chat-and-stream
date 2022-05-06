@@ -8,13 +8,11 @@ import 'package:streaming/services/database/database_service.dart';
 
 class FriendService extends DatabaseService {
   /// DECLARATION ///
-  StreamController _friendStreamController = StreamController.broadcast();
-  StreamController get friendStreamController => _friendStreamController;
-  late StreamSubscription _friendSubscription;
 
   StreamController _friendReqStreamController = StreamController.broadcast();
   StreamController get friendReqStreamController => _friendReqStreamController;
   late StreamSubscription _friendReqSubscription;
+
   CustomUser get currentUser => DatabaseService.user;
 
   /// CONSTRUCTOR ///
@@ -24,10 +22,6 @@ class FriendService extends DatabaseService {
 
   @override
   addStream() {
-    _friendSubscription = getUserFriends().listen((event) {
-      return _friendStreamController.add(event);
-    });
-
     _friendReqSubscription = getFriendRequests().listen((event) {
       return _friendReqStreamController.add(event);
     });
@@ -35,8 +29,6 @@ class FriendService extends DatabaseService {
 
   @override
   Future cleanupStream() async {
-    await _friendSubscription.cancel();
-    await _friendStreamController.stream.drain();
     await _friendReqSubscription.cancel();
     await _friendReqStreamController.stream.drain();
   }
@@ -44,39 +36,41 @@ class FriendService extends DatabaseService {
   /// METHODS ///
 
   // fetches current users friends list
-  Stream<List<CustomUser?>> getUserFriends() async* {
+  Future<List<CustomUser?>> getFriends() async {
     List<CustomUser?> contactList = [];
     CollectionReference userFriends =
         friends.doc(DatabaseService.user.uid).collection("userFriends");
 
-    await for (var rec in userFriends.snapshots()) {
-      List<CustomUser?> varList = [];
-      for (var document in rec.docs) {
-        final json = document.data() as Map<String, dynamic>;
-        final cusUser = CustomUser.fromJson(json: json);
-        varList.add(cusUser);
-      }
-      contactList = varList;
-      yield contactList;
+    final friendsDoc = await userFriends.get();
+    for (var document in friendsDoc.docs) {
+      final json = document.data() as Map<String, dynamic>;
+      final cusUser = CustomUser.fromJson(json: json);
+      contactList.add(cusUser);
     }
+    return contactList;
   }
 
   // accepts a friends request and adds them to the friends list.
   Future<void> addToFriends(CustomUser reqSender) async {
+    // adding a 'uid' field in the friends collections's doc
+    // so that it isn't an  empty document when I want to use the
+    // collection().get() method.
     try {
       // adding the request sender to out friendsList
-      await friends
-          .doc(currentUser.uid)
-          .collection("userFriends")
-          .doc(reqSender.uid)
-          .set(reqSender.toJson());
+      await friends.doc(currentUser.uid).set({"uid": reqSender.uid}).then(
+          (value) => friends
+              .doc(currentUser.uid)
+              .collection("userFriends")
+              .doc(reqSender.uid)
+              .set(reqSender.toJson()));
 
       // adding ourselves to the request sender's friendsList
-      await friends
-          .doc(reqSender.uid)
-          .collection("userFriends")
-          .doc(currentUser.uid)
-          .set(currentUser.toJson());
+      await friends.doc(reqSender.uid).set({"uid": currentUser.uid}).then(
+          (value) => friends
+              .doc(reqSender.uid)
+              .collection("userFriends")
+              .doc(currentUser.uid)
+              .set(currentUser.toJson()));
 
       // updating the friend request status.
       await requests
@@ -174,4 +168,5 @@ class FriendService extends DatabaseService {
   }
 
   //////// Testing ////////
+
 }

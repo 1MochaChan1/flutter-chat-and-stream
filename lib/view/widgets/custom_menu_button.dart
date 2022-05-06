@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:streaming/controller/chatroom_provider.dart';
 import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/themes_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
@@ -40,8 +41,11 @@ class CustomMenuButton extends StatelessWidget {
                   )),
               PopupMenuItem(
                   onTap: () async {
+                    // cleaning them from here because they sit above
+                    // the authentication screen.
                     context.read<UserProvider>().cleanupStream();
                     context.read<FriendProvider>().cleanupStream();
+                    context.read<ChatRoomProvider>().cleanupStream();
                     context.read<AuthService>().signOut();
                   },
                   child: Text(
@@ -60,6 +64,20 @@ class CustomMenuButton extends StatelessWidget {
                   },
                   child: Text(
                     "Notifications",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        ?.copyWith(fontSize: 16.0),
+                  )),
+              PopupMenuItem(
+                  onTap: () async {
+                    await Future.delayed(const Duration(milliseconds: 10));
+                    Navigator.of(context).pushNamed("/friends");
+
+                    // MyApp.navKey.currentState?.pushNamed("/notifs");
+                  },
+                  child: Text(
+                    "Friends",
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2

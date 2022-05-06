@@ -16,7 +16,7 @@ class CustomUser {
   String? photoUrl;
   String? displayName;
   String status;
-  Map<String, bool>? rooms;
+  List? rooms;
   String tag;
   bool existsInFriends;
 
@@ -28,7 +28,7 @@ class CustomUser {
           photoUrl: json["photoUrl"] ?? "",
           displayName: json["displayName"] ?? "",
           status: json["status"] ?? "Something Interesting..",
-          // rooms: json["rooms"],
+          rooms: json["rooms"] ?? [],
           tag: json["tag"] ?? "",
           existsInFriends: exists ?? json["existsInFriends"] ?? false);
 

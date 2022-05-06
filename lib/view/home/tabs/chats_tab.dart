@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming/controller/fake_contact_provider.dart';
-import 'package:streaming/controller/friend_provider.dart';
-import 'package:streaming/view/widgets/friend_card.dart';
+import 'package:streaming/controller/chatroom_provider.dart';
+import 'package:streaming/models/chatroom.dart';
+import 'package:streaming/models/enums.dart';
+import 'package:streaming/view/widgets/chat_card.dart';
 
 // ignore: must_be_immutable
 class ChatsTab extends StatelessWidget {
@@ -39,28 +40,38 @@ class ChatsTab extends StatelessWidget {
                 height: 20.0,
               ),
               Flexible(
-                child: Consumer2<FakeFriendProvider, FriendProvider>(
-                    builder: (_, notifier, notifier2, __) {
-                  notifier2.getFriends();
+                  child: Consumer<ChatRoomProvider>(builder: (_, notifier, __) {
+                final chatrooms = notifier.rooms;
+                if (chatrooms.isEmpty) {
+                  return const Center(
+                    child: Text("Empty"),
+                  );
+                } else if (notifier.currentState == DataState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
                   return ListView.builder(
                       shrinkWrap: true,
-                      itemCount: context
-                          .watch<FakeFriendProvider>()
-                          .contactsList
-                          .length,
-                      itemBuilder: (context, index) {
-                        return FriendCard(
-                            contact: notifier.contactsList[index]);
-                      });
-                }),
-              )
+                      itemCount: chatrooms.length,
+                      itemBuilder: ((context, index) {
+                        final endUser = chatrooms[index]
+                            .participents
+                            ?.where((element) =>
+                                element.uid != notifier.currentUser.uid)
+                            .toList()[0];
+                        // final otherUser = otherUsers?[0];
+                        return ChatCard(
+                            endUser: endUser!, chatRoom: chatrooms[index]);
+                      }));
+                }
+              }))
             ],
           ),
           PositionedDirectional(
               bottom: 10.0,
               end: 0.0,
               child: FloatingActionButton(
-                // backgroundColor: ,
                 elevation: 0.0,
                 onPressed: () async {
                   // Navigator.pushNamed(context, "/users");
@@ -94,3 +105,15 @@ class ChatsTab extends StatelessWidget {
     );
   }
 }
+// Consumer<FakeFriendProvider>(builder: (_, notifier, __) {
+//                   return ListView.builder(
+//                       shrinkWrap: true,
+//                       itemCount: context
+//                           .watch<FakeFriendProvider>()
+//                           .contactsList
+//                           .length,
+//                       itemBuilder: (context, index) {
+//                         return FriendCard(
+//                             contact: notifier.contactsList[index]);
+//                       });
+//                 })

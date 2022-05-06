@@ -1,6 +1,5 @@
 // ignore_for_file: unnecessary_string_interpolations, prefer_adjacent_string_concatenation
 
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/friend_provider.dart';
@@ -39,7 +38,6 @@ class NotificationScreen extends StatelessWidget {
                   builder: ((_, notifier, __) {
                     final requests = notifier?.requests;
                     notifier?.getFriendRequests();
-                    log(notifier?.requests.toString() ?? "");
                     if (notifier?.currentState == DataState.waiting) {
                       return loadingWidget();
                     } else if (notifier?.currentState == DataState.done) {

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-abstract class CustomChangeNotifier extends ChangeNotifier {
+abstract class CustomChangeNotifier with ChangeNotifier {
   void listenToStream();
   void cleanupStream();
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:streaming/controller/chatroom_provider.dart';
 import 'package:streaming/controller/page_state_provider.dart';
 import 'package:streaming/view/auth/authentication_screen.dart';
 import 'package:streaming/view/chat/chat_room_screen.dart';
@@ -13,6 +14,7 @@ class CustomRouteGenerator {
   static final GlobalKey<NavigatorState> navkey = GlobalKey<NavigatorState>();
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
+    var args = settings.arguments;
     switch (settings.name) {
       case "/intro":
         return MaterialPageRoute(
@@ -24,12 +26,22 @@ class CustomRouteGenerator {
       case "/home":
         return MaterialPageRoute(
             settings: settings,
-            builder: (_) => ChangeNotifierProvider<PageStateProvider>(
-                create: (_) => PageStateProvider(), child: const HomeScreen()));
+            builder: (_) => MultiProvider(providers: [
+                  ChangeNotifierProvider<PageStateProvider>(
+                      create: (_) => PageStateProvider()),
+                  // ChangeNotifierProvider(create: (_) => ChatRoomProvider())
+                ], child: const HomeScreen()));
 
       case "/chat_room":
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => ChatRoomScreen());
+        if (args is Map) {
+          return MaterialPageRoute(
+              settings: settings,
+              builder: (_) => ChatRoomScreen(
+                    chatRoom: args["chatRoom"],
+                    endUser: args["endUser"],
+                  ));
+        }
+        return errorRoute();
 
       case "/friends":
         return MaterialPageRoute(

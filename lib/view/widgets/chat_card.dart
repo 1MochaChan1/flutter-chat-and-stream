@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:streaming/models/friend.dart';
+import 'package:streaming/models/chatroom.dart';
+import 'package:streaming/models/custom_user.dart';
 
-class FriendCard extends StatelessWidget {
-  final Friend contact;
-  const FriendCard({Key? key, required this.contact}) : super(key: key);
+class ChatCard extends StatelessWidget {
+  final CustomUser endUser;
+  final ChatRoom chatRoom;
+  const ChatCard({Key? key, required this.endUser, required this.chatRoom})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,8 @@ class FriendCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(10.0),
         onTap: () async {
-          Navigator.of(context).pushNamed("/chat_room");
+          Navigator.of(context).pushNamed("/chat_room",
+              arguments: {"chatRoom": chatRoom, "endUser": endUser});
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -35,7 +39,7 @@ class FriendCard extends StatelessWidget {
                         height: 50,
                         width: 50,
                         fit: BoxFit.cover,
-                        imageUrl: contact.imgUrl ?? "",
+                        imageUrl: endUser.photoUrl ?? "",
                         progressIndicatorBuilder:
                             (context, url, downloadProgrees) =>
                                 const CircularProgressIndicator(),
@@ -59,13 +63,13 @@ class FriendCard extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            "${contact.name}",
+                            "${endUser.displayName}",
                             style: const TextStyle(
                                 fontSize: 20.0, fontWeight: FontWeight.w500),
                           ),
                         ),
                         Text(
-                          "${contact.lastMessage}",
+                          "${chatRoom.lastMessage?.text}",
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1
@@ -80,7 +84,8 @@ class FriendCard extends StatelessWidget {
                   child: Align(
                     alignment: AlignmentDirectional.topEnd,
                     child: Text(
-                      DateFormat().add_jm().format(DateTime.now()),
+                      dateFormatter(
+                          chatRoom.lastMessage?.sentAt.toString() ?? ""),
                       maxLines: 1,
                       softWrap: false,
                       style: const TextStyle(
@@ -98,9 +103,10 @@ class FriendCard extends StatelessWidget {
 
   String dateFormatter(String dateStr) {
     String date = "";
-    if (contact.lastMessageTime != null) {
-      date = DateFormat().add_jm().format(DateFormat("yyyy-MM-dd hh:mm:ss")
-          .parse(contact.lastMessageTime ?? ""));
+    if (chatRoom.lastMessage?.sentAt != null) {
+      date = DateFormat()
+          .add_jm()
+          .format(DateFormat("yyyy-MM-dd hh:mm:ss").parse(dateStr));
     }
     return date;
   }

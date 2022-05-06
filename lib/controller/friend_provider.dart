@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_final_fields
-import 'package:flutter/cupertino.dart';
+import 'package:streaming/models/abstract/custom_change_notifier.dart';
 import 'package:streaming/models/custom_user.dart';
 import 'package:streaming/models/enums.dart';
 import 'package:streaming/services/database/friend_service.dart';
 
-class FriendProvider extends ChangeNotifier {
+class FriendProvider extends CustomChangeNotifier {
   /// DECLARATIONS ///
   late FriendService _service;
   List<CustomUser?> _friends = [];
@@ -67,11 +67,11 @@ class FriendProvider extends ChangeNotifier {
   }
 
   // stream of friends
-  getFriends() {
-    _service.friendStreamController.stream.listen((friendsList) {
-      _friends = friendsList;
+  Future<void> getFriends() async {
+    _service.getFriends().then((firendsList) {
+      _friends = firendsList;
       notifyListeners();
-    }, onError: (err) => _currentState = DataState.error);
+    });
   }
 
   unFriend() {
@@ -79,10 +79,12 @@ class FriendProvider extends ChangeNotifier {
   }
 
   /// DEFAULTS ///
+  @override
   listenToStream() {
     _service.addStream();
   }
 
+  @override
   cleanupStream() async {
     await _service.cleanupStream();
   }

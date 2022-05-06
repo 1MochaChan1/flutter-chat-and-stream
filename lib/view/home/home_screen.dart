@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:streaming/controller/chatroom_provider.dart';
 import 'package:streaming/controller/fake_contact_provider.dart';
 import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
@@ -32,6 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
       context.read<FakeFriendProvider>().getContacts();
       context.read<UserProvider>().listenToStream();
       context.read<FriendProvider>().listenToStream();
+      context.read<FriendProvider>().getFriends();
+      context.read<ChatRoomProvider>().listenToStream();
+      context.read<ChatRoomProvider>().getChatRooms();
     });
 
     super.initState();

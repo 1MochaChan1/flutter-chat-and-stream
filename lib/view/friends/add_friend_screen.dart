@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/friend_provider.dart';
@@ -24,7 +22,6 @@ class AddFriendScreen extends StatelessWidget {
           child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Consumer<FriendProvider?>(builder: (_, notifier, __) {
-          log("rebuild");
           return Column(children: [
             CustomSearchField(
               controller: _searchController,

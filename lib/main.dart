@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:streaming/controller/chatroom_provider.dart';
 import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/my_app.dart';
@@ -62,6 +63,8 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => themeProvider,
         ),
+
+        ChangeNotifierProvider(create: (_) => ChatRoomProvider())
       ],
       child: MyApp(
         initPage: initPage,
