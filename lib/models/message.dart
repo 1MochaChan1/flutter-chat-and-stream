@@ -16,19 +16,11 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     var sentAtDateTime = json["sentAt"];
-    var status = "";
     if (json["sentAt"] != null) {
       final sentAtTimestamp = json["sentAt"] as Timestamp;
       sentAtDateTime = DateTime.fromMillisecondsSinceEpoch(
           sentAtTimestamp.millisecondsSinceEpoch);
     }
-
-    // if (json["status"] == "pending" /*&& json["sentAt"] != null*/) {
-    //   status = "sent";
-    // } else {
-    //   status = "pending";
-    // }
-
     return Message(
         sentAt: sentAtDateTime,
         text: json["text"],

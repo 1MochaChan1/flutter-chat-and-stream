@@ -36,7 +36,7 @@ class DatabaseService extends CustomService {
     // however this customUser doesn't have our custom properties
     // just a firebaseUser mapped to customUser.
     _user = customUser;
-    await checkNewUser(customUser);
+    await _checkNewUser(customUser);
   }
 
   // if the currentUser is stored in sharedPreference.
@@ -67,13 +67,13 @@ class DatabaseService extends CustomService {
   // check if this user is new
   // yes: creates a new user in collection and gets it.
   // no: gets the user from db
-  Future<CustomUser> checkNewUser(CustomUser? cusUser) async {
+  Future<CustomUser> _checkNewUser(CustomUser? cusUser) async {
     try {
       _user = cusUser ?? user;
       final fAuthUser = await users.doc(user.uid).get();
       CustomUser newUser;
       if (!fAuthUser.exists) {
-        newUser = await createNewUser();
+        newUser = await _createNewUser();
         _user = newUser;
       } else {
         final fsUser = await users.doc(_user?.uid).get();
@@ -91,7 +91,7 @@ class DatabaseService extends CustomService {
 
   // creates a new user if not exists and
   // uploads it to firestore.
-  Future<CustomUser> createNewUser() async {
+  Future<CustomUser> _createNewUser() async {
     final usersCollection = await users.get();
     final uniqueId = numFormat.format(usersCollection.docs.length);
     try {

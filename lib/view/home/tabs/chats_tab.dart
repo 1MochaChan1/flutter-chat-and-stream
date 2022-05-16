@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/chatroom_provider.dart';
-import 'package:streaming/models/chatroom.dart';
 import 'package:streaming/models/enums.dart';
 import 'package:streaming/view/widgets/chat_card.dart';
 

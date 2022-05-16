@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:streaming/controller/chatroom_provider.dart';
-import 'package:streaming/controller/fake_contact_provider.dart';
-import 'package:streaming/controller/friend_provider.dart';
-import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/services/cleanup_service.dart';
 import 'package:streaming/view/home/tabs/chats_tab.dart';
 import 'package:streaming/view/home/tabs/movies_tab.dart';

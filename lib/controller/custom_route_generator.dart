@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming/controller/chatroom_provider.dart';
 import 'package:streaming/controller/page_state_provider.dart';
 import 'package:streaming/view/auth/authentication_screen.dart';
 import 'package:streaming/view/chat/chat_room_screen.dart';

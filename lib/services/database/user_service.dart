@@ -2,7 +2,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:streaming/models/chatroom.dart';
 import 'package:streaming/models/custom_user.dart';
 import 'package:streaming/services/database/database_service.dart';
 import 'package:streaming/services/shared_preferences.dart';

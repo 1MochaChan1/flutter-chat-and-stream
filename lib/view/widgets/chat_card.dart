@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:streaming/constants.dart';
 import 'package:streaming/models/chatroom.dart';
 import 'package:streaming/models/custom_user.dart';

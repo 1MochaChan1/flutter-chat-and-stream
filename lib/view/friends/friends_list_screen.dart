@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_adjacent_string_concatenation
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/friend_provider.dart';

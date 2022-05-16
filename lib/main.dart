@@ -6,7 +6,6 @@ import 'package:streaming/controller/chatroom_provider.dart';
 import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/my_app.dart';
-import 'package:streaming/controller/fake_contact_provider.dart';
 import 'package:streaming/controller/themes_provider.dart';
 import 'package:streaming/services/auth_service.dart';
 import 'package:streaming/services/database/database_service.dart';
@@ -38,9 +37,6 @@ Future<void> main() async {
         InheritedProvider<DatabaseService?>(
           create: (_) => databaseService,
         ),
-
-        // contacts provider
-        ChangeNotifierProvider(create: (_) => FakeFriendProvider()),
 
         // these just provide the users as contacts that
         // can be added by the current user.

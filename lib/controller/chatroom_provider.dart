@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'dart:developer';
 
 import 'package:streaming/models/abstract/custom_change_notifier.dart';
@@ -28,8 +30,13 @@ class ChatRoomProvider extends CustomChangeNotifier {
   }
 
   /// CONSTRUCTOR ///
-  ChatRoomProvider() {
-    _service = ChatRoomService();
+  ChatRoomProvider({ChatRoomService? service}) {
+    if (service != null) {
+      _service = service;
+    } else {
+      _service = ChatRoomService();
+    }
+
     currentUser = _service.currentUser;
   }
 
