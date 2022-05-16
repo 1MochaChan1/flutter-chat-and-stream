@@ -6,6 +6,7 @@ import 'package:streaming/controller/themes_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
 import 'package:streaming/models/enums.dart';
 import 'package:streaming/services/auth_service.dart';
+import 'package:streaming/services/cleanup_service.dart';
 
 class CustomMenuButton extends StatelessWidget {
   const CustomMenuButton({Key? key}) : super(key: key);
@@ -41,11 +42,10 @@ class CustomMenuButton extends StatelessWidget {
                   )),
               PopupMenuItem(
                   onTap: () async {
-                    // cleaning them from here because they sit above
+                    // cleaning data streams from here
+                    // because they sit above
                     // the authentication screen.
-                    context.read<UserProvider>().cleanupStream();
-                    context.read<FriendProvider>().cleanupStream();
-                    context.read<ChatRoomProvider>().cleanupStream();
+                    InitProviders.cleanup(context);
                     context.read<AuthService>().signOut();
                   },
                   child: Text(

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:streaming/constants.dart';
 import 'package:streaming/models/chatroom.dart';
 import 'package:streaming/models/custom_user.dart';
 
@@ -70,11 +71,14 @@ class ChatCard extends StatelessWidget {
                         ),
                         Text(
                           "${chatRoom.lastMessage?.text}",
+                          overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1
                               ?.copyWith(
-                                  fontSize: 10.0, fontWeight: FontWeight.w400),
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: Theme.of(context).hintColor),
                         ),
                       ],
                     ),
@@ -99,15 +103,5 @@ class ChatCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String dateFormatter(String dateStr) {
-    String date = "";
-    if (chatRoom.lastMessage?.sentAt != null) {
-      date = DateFormat()
-          .add_jm()
-          .format(DateFormat("yyyy-MM-dd hh:mm:ss").parse(dateStr));
-    }
-    return date;
   }
 }

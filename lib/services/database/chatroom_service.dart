@@ -20,9 +20,12 @@ class ChatRoomService extends DatabaseService {
 
   CustomUser get currentUser => DatabaseService.user;
 
+  /// CONSTRUCTOR ///
   ChatRoomService() {
     addStream();
   }
+
+  /// METHODS ///
 
   @override
   void addStream({String? roomId}) {
@@ -43,7 +46,7 @@ class ChatRoomService extends DatabaseService {
     await _roomStreamController.stream.drain();
   }
 
-  /// METHODS ///
+// # ROOM # //
 
   // creating a chatroom for two users
   Future createChatRoom(CustomUser participent2) async {
@@ -73,7 +76,7 @@ class ChatRoomService extends DatabaseService {
     });
   }
 
-  // get the chats the user has
+  // get the chatrooms the user has
   Stream<List<ChatRoom>> getChatRooms() async* {
     List<ChatRoom> chatRooms = [];
     // get the rooms where the current user is present
@@ -107,23 +110,8 @@ class ChatRoomService extends DatabaseService {
     }
   }
 
-  // send message to the endUser
-  Future<bool> sendMessage(String roomId, Message msg) async {
-    try {
-      await rooms
-          .doc(roomId)
-          .collection("messages")
-          .add(msg.toJson())
-          .then((value) {
-        rooms.doc(roomId).update({"lastMessage": msg.toJson()});
-      });
-      return true;
-    } catch (e) {
-      log(e.toString());
-      return false;
-    }
-  }
-
+  // checks if user already exists in the chatroom that
+  // is about to be created.
   Future<bool> checkIfChatRoomExists(String endUserId) async {
     try {
       final userInRoom = await rooms
@@ -139,6 +127,44 @@ class ChatRoomService extends DatabaseService {
     }
   }
 
+// # MESSAGES # //
+
+  // send message to the endUser
+  Future<bool> sendMessage(String roomId, Message msg) async {
+    try {
+      DocumentReference msgDocRef =
+          rooms.doc(roomId).collection("messages").doc();
+
+      msg.msgId = msgDocRef.id;
+      await msgDocRef.set(msg.toJson()).then((value) {
+        rooms.doc(roomId).update(
+          {"lastMessage": msg.toJson()},
+        );
+      });
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
+
+  Future updateMessageStatus(Message msg, String roomId) async {
+    try {
+      if (msg.status == "seen") {
+        return;
+      }
+      rooms
+          .doc(roomId)
+          .collection("messages")
+          .doc(msg.msgId)
+          .update({"status": "seen"}).then((value) => rooms.doc(roomId).update(
+                {"lastMessage": msg.toJson()},
+              ));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // get stream of messages.
   Stream<List<Message>> getMessages({String? roomId}) async* {
     // looping through the messages in the room
@@ -148,42 +174,12 @@ class ChatRoomService extends DatabaseService {
           .collection("messages")
           .orderBy("sentAt", descending: true)
           .snapshots()) {
+        // the changes of the status is done inside the user model.
         List<Message> messageList =
             data.docs.map((doc) => Message.fromJson(doc.data())).toList();
         // if there's any change, user is notified.
         yield messageList;
       }
     }
-  }
-
-  /// TESTING ///
-  Future<List<ChatRoom>> getChatRoomsFut() async {
-    List<ChatRoom> chatRooms = [];
-    // get the rooms where the current user is present
-    final chatRoomDocs = await rooms
-        .where("participentIds", arrayContains: currentUser.uid)
-        .get();
-
-    // getting all the chatrooms the user is a part of.
-    for (var doc in chatRoomDocs.docs) {
-      final json = doc.data() as Map<String, dynamic>;
-
-      // get the chatrooms and create its instance
-      final chatRoomObj = ChatRoom.fromJson(json);
-      final participentsRaw =
-          await users.where("uid", whereIn: chatRoomObj.participentIds).get();
-
-      // get the users in the chatroom using their userId from the chatRoomObj
-      List<CustomUser> particpentsList = participentsRaw.docs
-          .map((e) =>
-              CustomUser.fromJson(json: e.data() as Map<String, dynamic>))
-          .toList();
-
-      // assign the users as participents of the chatroom.
-      chatRoomObj.setParticipents(particpentsList);
-      chatRooms.add(chatRoomObj);
-    }
-    // log(chatRooms.toString());
-    return chatRooms;
   }
 }

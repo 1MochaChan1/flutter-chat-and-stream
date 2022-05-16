@@ -58,7 +58,7 @@ class ChatRoomProvider extends CustomChangeNotifier {
   Future<bool> sendMessage(
       {required String roomId, required Message msg}) async {
     try {
-      await _service.sendMessage(roomId, msg);
+      _service.sendMessage(roomId, msg).then((value) => notifyListeners());
       notifyListeners();
       return true;
     } catch (e) {
@@ -67,11 +67,23 @@ class ChatRoomProvider extends CustomChangeNotifier {
     }
   }
 
+  // indicates if the message has been read.
+  updateMessageStatus({required String roomId, required Message msg}) async {
+    try {
+      await _service.updateMessageStatus(msg, roomId);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   /// DEFAULT ///
 
   @override
   void cleanupStream() async {
     _currentState = DataState.waiting;
+    _rooms.clear();
+    _messages.clear();
     await _service.cleanupStream();
     notifyListeners();
   }

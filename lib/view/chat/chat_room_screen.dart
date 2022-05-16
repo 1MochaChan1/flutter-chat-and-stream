@@ -1,18 +1,16 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming/constants.dart';
 import 'package:streaming/controller/chatroom_provider.dart';
 import 'package:streaming/models/chatroom.dart';
 import 'package:streaming/models/custom_user.dart';
 import 'package:streaming/models/message.dart';
-import 'package:streaming/services/database/chatroom_service.dart';
 import 'package:streaming/services/database/database_service.dart';
+import 'package:streaming/view/widgets/message_card.dart';
+import 'package:streaming/view/widgets/message_text_field.dart';
 
 class ChatRoomScreen extends StatelessWidget {
   ChatRoom chatRoom;
@@ -23,7 +21,6 @@ class ChatRoomScreen extends StatelessWidget {
       : super(key: key);
 
   /// DECLARATIONS ///
-  // final msg = DummyData().messages.reversed.toList();
   CustomUser currentUser = DatabaseService.user;
   ScrollController scrollController = ScrollController();
   TextEditingController messageController = TextEditingController();
@@ -33,66 +30,80 @@ class ChatRoomScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<ChatRoomProvider>().listenToStream(roomId: chatRoom.roomId);
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: chatRoomAppBar(context, size),
-      body: Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(children: [
-          Flexible(
-            child: Consumer<ChatRoomProvider>(builder: (_, notifier, __) {
-              notifier.getMessages();
-              final msg = notifier.messages;
-              return SizedBox(
-                height: size.height,
-                child: ListView.builder(
-                    reverse: true,
-                    controller: scrollController,
-                    itemCount: msg.length,
-                    shrinkWrap: true,
-                    itemBuilder: ((context, index) {
-                      bool byMe = msg[index].sentBy == currentUser.uid;
-                      return buildTextContainer(
-                          context, msg[index], byMe, size);
-                    })),
-              );
-            }),
-          ),
-          Align(
-              alignment: AlignmentDirectional.bottomCenter,
-              child: SizedBox(
-                width: size.width * 0.95,
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: Scrollbar(
-                        child: MessageTextField(
-                            messageController: messageController),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: InkWell(
-                        onTap: () {
-                          final msg = Message(
-                              sentAt: FieldValue.serverTimestamp(),
-                              text: messageController.text.trim(),
-                              sentBy: currentUser.uid);
-                          context
-                              .read<ChatRoomProvider>()
-                              .sendMessage(msg: msg, roomId: chatRoom.roomId);
-                          messageController.clear();
-                        },
-                        borderRadius: BorderRadius.circular(30.0),
-                        child: const ClipRRect(
-                          child: Icon(Icons.send),
+    return WillPopScope(
+      onWillPop: () async {
+        context.read<ChatRoomProvider>().messages.clear();
+        return true;
+      },
+      child: Scaffold(
+        appBar: chatRoomAppBar(context, size),
+        body: Container(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(children: [
+            Flexible(
+              child: Consumer<ChatRoomProvider>(builder: (_, notifier, __) {
+                notifier.getMessages();
+                final messages = notifier.messages;
+                return SizedBox(
+                  height: size.height,
+                  child: ListView.builder(
+                      reverse: true,
+                      controller: scrollController,
+                      itemCount: messages.length,
+                      shrinkWrap: true,
+                      itemBuilder: ((context, index) {
+                        // checks if we're the sender.
+                        bool byMe = messages[index].sentBy == currentUser.uid;
+                        return MessageCard(
+                            context: context,
+                            msg: messages[index],
+                            byMe: byMe,
+                            roomId: chatRoom.roomId,
+                            size: size);
+                      })),
+                );
+              }),
+            ),
+            Align(
+                alignment: AlignmentDirectional.bottomCenter,
+                child: SizedBox(
+                  width: size.width * 0.95,
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Scrollbar(
+                          child: MessageTextField(
+                              messageController: messageController),
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ))
-        ]),
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: InkWell(
+                          onTap: () {
+                            // we have the status of 'sent' here since
+                            // firebase operates when it's offline too.
+                            final msg = Message(
+                                sentAt: FieldValue.serverTimestamp(),
+                                text: messageController.text.trim(),
+                                sentBy: currentUser.uid,
+                                status: "sent");
+                            context
+                                .read<ChatRoomProvider>()
+                                .sendMessage(msg: msg, roomId: chatRoom.roomId);
+                            messageController.clear();
+                          },
+                          borderRadius: BorderRadius.circular(30.0),
+                          child: const ClipRRect(
+                            child: Icon(Icons.send),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ))
+          ]),
+        ),
       ),
     );
   }
@@ -146,82 +157,6 @@ class ChatRoomScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget buildTextContainer(
-      BuildContext context, Message msg, bool byMe, Size size) {
-    if (byMe) {
-      return Align(
-        alignment: AlignmentDirectional.centerEnd,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            padding: const EdgeInsets.all(8.0),
-            width: size.width * 0.5,
-            decoration: BoxDecoration(
-                color: kTextContainerMe,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                )),
-            child: Text(
-              msg.text,
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Align(
-        alignment: AlignmentDirectional.centerStart,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            padding: const EdgeInsets.all(8.0),
-            width: size.width * 0.5,
-            decoration: BoxDecoration(
-                color: kTextContainerOthers,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                )),
-            child: Text(
-              msg.text,
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-          ),
-        ),
-      );
-    }
-  }
-}
-
-class MessageTextField extends StatelessWidget {
-  const MessageTextField({
-    Key? key,
-    required this.messageController,
-  }) : super(key: key);
-
-  final TextEditingController messageController;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      keyboardType: TextInputType.multiline,
-      minLines: 1, //Normal textInputField will be displayed
-      maxLines: 5, // when user presses enter it will adapt to it
-      style: Theme.of(context).textTheme.bodyText2,
-      decoration: InputDecoration(
-          filled: true,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(25.0))),
-      controller: messageController,
     );
   }
 }

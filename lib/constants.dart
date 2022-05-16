@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:streaming/models/enums.dart';
 
 // common
@@ -55,4 +56,17 @@ void setkTextContainerColors(CusTheme currentTheme) {
       _kTextContainerOthers = Colors.deepOrangeAccent.shade100;
       break;
   }
+}
+
+String dateFormatter(String dateStr) {
+  String date = "";
+
+  if (dateStr == "null") {
+    return "";
+  }
+  date = DateFormat()
+      .add_jm()
+      .format(DateFormat("yyyy-MM-dd hh:mm:ss").parse(dateStr));
+
+  return date;
 }

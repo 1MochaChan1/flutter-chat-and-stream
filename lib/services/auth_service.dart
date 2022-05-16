@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:streaming/models/custom_user.dart';
@@ -80,7 +82,9 @@ class AuthService {
     // will use enum here.
     bool isGoogleSignedIn = await _gSignIn.isSignedIn();
     if (isGoogleSignedIn) {
-      await GoogleSignIn().disconnect();
+      await GoogleSignIn().disconnect().catchError((err) async {
+        log("Google signout error");
+      });
       CustomPreferences.setCurrUser(null);
     }
 

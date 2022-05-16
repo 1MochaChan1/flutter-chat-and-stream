@@ -42,13 +42,13 @@ class ChatsTab extends StatelessWidget {
               Flexible(
                   child: Consumer<ChatRoomProvider>(builder: (_, notifier, __) {
                 final chatrooms = notifier.rooms;
-                if (chatrooms.isEmpty) {
-                  return const Center(
-                    child: Text("Empty"),
-                  );
-                } else if (notifier.currentState == DataState.waiting) {
+                if (notifier.currentState == DataState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(),
+                  );
+                } else if (chatrooms.isEmpty) {
+                  return const Center(
+                    child: Text("Empty"),
                   );
                 } else {
                   return ListView.builder(
@@ -105,15 +105,3 @@ class ChatsTab extends StatelessWidget {
     );
   }
 }
-// Consumer<FakeFriendProvider>(builder: (_, notifier, __) {
-//                   return ListView.builder(
-//                       shrinkWrap: true,
-//                       itemCount: context
-//                           .watch<FakeFriendProvider>()
-//                           .contactsList
-//                           .length,
-//                       itemBuilder: (context, index) {
-//                         return FriendCard(
-//                             contact: notifier.contactsList[index]);
-//                       });
-//                 })

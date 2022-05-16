@@ -11,12 +11,12 @@ class UserProvider extends ChangeNotifier {
   late UserService _service;
   late CustomUser? _user;
   late StreamController _controller;
-  List<CustomUser> _usersList = [];
+  // List<CustomUser> _usersList = [];
   DataState _currentState = DataState.done;
 
   // getters
   StreamController get controller => _controller;
-  List<CustomUser> get usersList => _usersList;
+  // List<CustomUser> get usersList => _usersList;
   DataState get currentState => _currentState;
   CustomUser get user => _user!;
 
