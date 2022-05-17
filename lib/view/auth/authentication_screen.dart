@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/constants.dart';
+import 'package:streaming/controller/auth_provider.dart';
 import 'package:streaming/controller/themes_provider.dart';
 import 'package:streaming/models/custom_user.dart';
 import 'package:streaming/models/enums.dart';
 import 'package:streaming/services/auth_service.dart';
 import 'package:streaming/services/database/database_service.dart';
 import 'package:streaming/themes/icons.dart';
-import 'package:streaming/view/widgets/search_field.dart';
+import 'package:streaming/view/widgets/custom_text_field.dart';
 
 class AuthenticationScreen extends StatelessWidget {
   AuthenticationScreen({Key? key}) : super(key: key);
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
-  final AuthService _service = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class AuthenticationScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
-        child: Consumer<CustomUser?>(builder: (_, cusUserNotifier, __) {
+        child: Consumer<AuthProvider>(builder: (_, authNotifier, __) {
           return SizedBox(
             height: size.height,
             child: SingleChildScrollView(
@@ -68,7 +68,7 @@ class AuthenticationScreen extends StatelessWidget {
                     height: size.height * .04,
                   ),
                   Flexible(
-                    child: CustomSearchField(
+                    child: CustomTextField(
                       leadingIcon: Icons.email_outlined,
                       controller: emailController,
                       hintText: "Email",
@@ -78,7 +78,7 @@ class AuthenticationScreen extends StatelessWidget {
                     height: size.height * .02,
                   ),
                   Flexible(
-                    child: CustomSearchField(
+                    child: CustomTextField(
                       leadingIcon: Icons.password,
                       isPassword: true,
                       controller: passController,
@@ -100,11 +100,16 @@ class AuthenticationScreen extends StatelessWidget {
                               ?.copyWith(color: kWhite),
                         ),
                         onPressed: () async {
-                          final user = await _service.emailSignIn(
+                          final user = await authNotifier.emailSignIn(
                               email: emailController.text.trim(),
                               password: passController.text.trim());
                           if (user != null) {
-                            await dbProvider?.setInitUser(user);
+                            switch (user["response"]) {
+                              case AuthState.wrongPassword:
+                                break;
+                              case AuthState.noUserFound:
+                                break;
+                            }
                           }
                         }),
                   ),
@@ -134,9 +139,10 @@ class AuthenticationScreen extends StatelessWidget {
                   ),
                   ElevatedButton.icon(
                       onPressed: () async {
-                        final user = await _service.googleSignIn();
+                        final user = await authNotifier.googleSignIn();
                         if (user != null) {
                           await dbProvider?.setInitUser(user);
+                          authNotifier.notify();
                         }
                       },
                       icon: const Icon(CustomIconPack.google),

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-class CustomSearchField extends StatelessWidget {
+class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String? hintText;
   final IconData? leadingIcon;
@@ -12,7 +12,7 @@ class CustomSearchField extends StatelessWidget {
   final String? errorText;
   final bool validCondition;
   ValueNotifier<bool> _isPasswordVisible = ValueNotifier<bool>(false);
-  CustomSearchField(
+  CustomTextField(
       {Key? key,
       this.controller,
       this.hintText = "",
@@ -36,7 +36,6 @@ class CustomSearchField extends StatelessWidget {
             obscureText: isPassword && !_isPasswordVisible.value,
             decoration: InputDecoration(
                 filled: true,
-                // fillColor: Theme.of(context).bottomAppBarColor,
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide.none),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/models/enums.dart';
-import 'package:streaming/view/widgets/search_field.dart';
+import 'package:streaming/view/widgets/custom_text_field.dart';
 
 class AddFriendScreen extends StatelessWidget {
   AddFriendScreen({Key? key}) : super(key: key);
@@ -23,7 +23,7 @@ class AddFriendScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Consumer<FriendProvider?>(builder: (_, notifier, __) {
           return Column(children: [
-            CustomSearchField(
+            CustomTextField(
               controller: _searchController,
               leadingIcon: Icons.search,
               hintText: "Search...",

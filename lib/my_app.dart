@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:streaming/controller/auth_provider.dart';
 import 'controller/custom_route_generator.dart';
 import 'controller/themes_provider.dart';
 
@@ -15,9 +15,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // using two providers
-    return Consumer2<ThemeProvider, User?>(
-        builder: (_, themeNotifier, cusUserNotifier, ___) {
-      String navPath = cusUserNotifier == null ? "/auth" : "/home";
+    return Consumer2<ThemeProvider, AuthProvider>(
+        builder: (_, themeNotifier, authNotifier, ___) {
+      authNotifier.onAuthStateChange();
+      String navPath = authNotifier.currentUser == null ? "/auth" : "/home";
       String currentRoute = ModalRoute.of(context)?.settings.name ?? "";
       if (currentRoute != "/intro") {
         _navKey.currentState

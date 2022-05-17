@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:streaming/controller/auth_provider.dart';
 import 'package:streaming/controller/chatroom_provider.dart';
 import 'package:streaming/controller/friend_provider.dart';
 import 'package:streaming/controller/user_provider.dart';
@@ -31,7 +32,9 @@ Future<void> main() async {
   runApp(MultiProvider(
       providers: [
         // authService provider
-        InheritedProvider(create: (_) => AuthService()),
+        // InheritedProvider(create: (_) => AuthService()),
+        ChangeNotifierProvider<AuthProvider>(
+            create: (_) => AuthProvider(AuthService())),
 
         // data provider
         InheritedProvider<DatabaseService?>(
@@ -50,10 +53,10 @@ Future<void> main() async {
         ),
 
         // authState provider (from Firebase)
-        StreamProvider<User?>(
-            create: (context) => context.read<AuthService>().onAuthStateChanged,
-            initialData: null,
-            catchError: (_, err) => null),
+        // StreamProvider<User?>(
+        //     create: (context) => context.read<AuthService>().onAuthStateChanged,
+        //     initialData: null,
+        //     catchError: (_, err) => null),
 
         // theme provider
         ChangeNotifierProvider(

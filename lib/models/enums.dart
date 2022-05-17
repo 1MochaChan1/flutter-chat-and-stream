@@ -11,3 +11,12 @@ enum DataState { waiting, done, error }
 
 // state for components like List Tile etc.,
 enum ChildWidgetState { waiting, done, error }
+
+// state for different types of errors during auth
+enum AuthState {
+  weakPassword,
+  emailAlreadyInUse,
+  noUserFound,
+  wrongPassword,
+  success
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:streaming/controller/auth_provider.dart';
 import 'package:streaming/controller/themes_provider.dart';
 import 'package:streaming/models/enums.dart';
 import 'package:streaming/services/auth_service.dart';
@@ -43,7 +44,7 @@ class CustomMenuButton extends StatelessWidget {
                     // because they sit above
                     // the authentication screen.
                     InitProviders.cleanup(context);
-                    context.read<AuthService>().signOut();
+                    context.read<AuthProvider>().signOut();
                   },
                   child: Text(
                     "Log Out",
