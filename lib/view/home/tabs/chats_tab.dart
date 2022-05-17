@@ -57,7 +57,7 @@ class ChatsTab extends StatelessWidget {
                         final endUser = chatrooms[index]
                             .participents
                             ?.where((element) =>
-                                element.uid != notifier.currentUser.uid)
+                                element.uid != notifier.currentUser?.uid)
                             .toList()[0];
                         // final otherUser = otherUsers?[0];
                         return ChatCard(

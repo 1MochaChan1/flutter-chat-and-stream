@@ -18,7 +18,9 @@ class ChatRoomService extends DatabaseService {
   StreamController get roomStreamController => _roomStreamController;
   late StreamSubscription _roomStreamSubscription;
 
-  CustomUser get currentUser => DatabaseService.user;
+  // highly unlikely for this to be null here,
+  // I've added null safety for testing only.
+  CustomUser? get currentUser => DatabaseService.user;
 
   /// CONSTRUCTOR ///
   ChatRoomService() {
@@ -59,13 +61,13 @@ class ChatRoomService extends DatabaseService {
     // adding the two users and their ids to roomDoc in Rooms collection
     await rooms.add({
       // "participents": [currentUser.toJson(), participent2.toJson()],
-      "participentIds": [currentUser.uid, participent2.uid]
+      "participentIds": [currentUser?.uid, participent2.uid]
     }).then((generatedRoom) {
       // adding a field roomId to the newly created room.
       rooms.doc(generatedRoom.id).update({"roomId": generatedRoom.id});
 
       // adding the current room ID to user1
-      users.doc(currentUser.uid).update({
+      users.doc(currentUser?.uid).update({
         "rooms": FieldValue.arrayUnion([generatedRoom.id])
       });
 
@@ -81,7 +83,7 @@ class ChatRoomService extends DatabaseService {
     List<ChatRoom> chatRooms = [];
     // get the rooms where the current user is present
     final chatRoomStream = rooms
-        .where("participentIds", arrayContains: currentUser.uid)
+        .where("participentIds", arrayContains: currentUser?.uid)
         .snapshots();
 
     // getting all the chatrooms the user is a part of.
@@ -181,5 +183,10 @@ class ChatRoomService extends DatabaseService {
         yield messageList;
       }
     }
+  }
+
+  /// TESTING ///
+  Future<List<Message>> getTestMessages() async {
+    return [];
   }
 }

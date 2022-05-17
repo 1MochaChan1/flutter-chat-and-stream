@@ -12,7 +12,7 @@ import 'package:streaming/services/database/chatroom_service.dart';
 class ChatRoomProvider extends CustomChangeNotifier {
   /// DECLARATION ///
   late ChatRoomService _service;
-  late CustomUser currentUser;
+  late CustomUser? currentUser;
   bool _disposed = false;
   DataState _currentState = DataState.waiting;
   List<ChatRoom> _rooms = [];
@@ -109,5 +109,13 @@ class ChatRoomProvider extends CustomChangeNotifier {
     if (!_disposed) {
       super.notifyListeners();
     }
+  }
+
+  /// TESTING ///
+  Future<void> getTestMessages() async {
+    _currentState = DataState.waiting;
+    final testMessages = await _service.getTestMessages();
+    _messages = testMessages;
+    _currentState = DataState.done;
   }
 }
